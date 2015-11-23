@@ -11,6 +11,16 @@ function GameObject(x,y,width,height,color) {
     var objectWidth = width;
     var objectHeight = height;
 
+
+    var moveUp = function() {
+      console.log("You pressed Left");
+    };
+
+
+
+
+    var actions = {37: moveUp()};
+
     this.tick = function() {
         xPos += this.velocityX;
         yPos += this.velocityY;
@@ -20,4 +30,10 @@ function GameObject(x,y,width,height,color) {
         context.fillStyle = this.color;
         context.fillRect(xPos,yPos,objectWidth,objectHeight);
     };
+
+    this.keyAction = function(keyHash) {
+        
+    };
+
+
 }

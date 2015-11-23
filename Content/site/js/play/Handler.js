@@ -2,8 +2,10 @@
  * Created by fredrik.svahn on 20/11/15.
  */
 
-function Handler() {
+function Handler(context,keyHash) {
+    this.keyHash = keyHash;
     this.ObjectList = [];
+    this.context = context;
 
     this.tick = function() {
         for(var i = 0; i < this.ObjectList.length; i++) {
@@ -13,7 +15,7 @@ function Handler() {
 
     this.draw = function() {
         for(var i = 0; i < this.ObjectList.length; i++) {
-            this.ObjectList[i].draw();
+            this.ObjectList[i].draw(this.context);
         }
     };
 
@@ -24,4 +26,10 @@ function Handler() {
     this.removeObject = function(object) {
         this.ObjectList.splice(this.ObjectList.indexOf(object), 1);
     };
+    
+    this.keyAction = function() {
+        for(var i = 0; i < this.ObjectList.length; i++) {
+            this.ObjectList[i].keyAction(this.keyHash);
+        }
+    }
 }

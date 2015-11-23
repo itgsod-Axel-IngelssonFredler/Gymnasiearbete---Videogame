@@ -7,12 +7,21 @@ function Game(canvas) {
     var context = canvas.getContext("2d");
     canvas.width = width;
     canvas.height = height;
-    var handler = new Handler();
     var frames = 0;
     var fps = 0;
     var time = new Date().getTime();
     var pastTime = new Date().getTime();
     var deltaTime = 0;
+    var keyHash = {};
+    this.handler = new Handler(context,keyHash);
+    window.addEventListener("keydown", function(e) {
+        e.preventDefault();
+        keyHash[e.keyCode] = 1;
+    },false);
+
+    window.addEventListener("keyup", function(e) {
+        //this.keyHash[e.keyCode] = 0;
+    }, false);
 
     this.run = function() {
         time = new Date().getTime();
@@ -34,13 +43,16 @@ function Game(canvas) {
 
         context.fillStyle = "#0000FF";
         context.fillRect(0,0,width,height);
-        handler.draw();
+        this.handler.draw(context);
     };
 
     this.tick = function() {
-        handler.tick();
+        this.handler.tick();
     };
 
+    this.showKeyHash = function() {
+        console.log(keyHash);
+    }
 
 }
 
@@ -48,8 +60,11 @@ function Game(canvas) {
 
 function main() {
     var canvas = document.getElementById("GameCanvas") || document.body.appendChild(document.createElement("canvas"));
-    var game1 = new Game(canvas);
+    game1 = new Game(canvas);
+    var player = new GameObject(0,0,100,175,"#FF0000");
+    game1.handler.addObject(player);
     var loop = setInterval(function() {
         game1.run();
-    },16.6666667);
+    },15);
 }
+
