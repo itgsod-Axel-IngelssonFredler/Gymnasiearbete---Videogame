@@ -2,8 +2,7 @@
  * Created by fredrik.svahn on 20/11/15.
  */
 
-function Handler(context,keyHash) {
-    this.keyHash = keyHash;
+function Handler(context) {
     this.ObjectList = [];
     this.context = context;
 
@@ -27,9 +26,9 @@ function Handler(context,keyHash) {
         this.ObjectList.splice(this.ObjectList.indexOf(object), 1);
     };
     
-    this.keyAction = function() {
+    this.keyAction = function(keyHash) {
         for(var i = 0; i < this.ObjectList.length; i++) {
-            this.ObjectList[i].keyAction(this.keyHash);
+            this.ObjectList[i].keyAction(keyHash);
         }
     }
 }

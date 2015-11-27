@@ -20,12 +20,13 @@ function Game(canvas) {
     },false);
 
     window.addEventListener("keyup", function(e) {
-        //this.keyHash[e.keyCode] = 0;
+        keyHash[e.keyCode] = 0;
     }, false);
 
     this.run = function() {
         time = new Date().getTime();
         deltaTime += time-pastTime;
+        this.keyAction();
         this.tick();
         this.draw();
         frames++;
@@ -52,7 +53,12 @@ function Game(canvas) {
 
     this.showKeyHash = function() {
         console.log(keyHash);
-    }
+    };
+
+    this.keyAction = function() {
+        this.handler.keyAction(keyHash);
+    };
+
 
 }
 
@@ -65,6 +71,6 @@ function main() {
     game1.handler.addObject(player);
     var loop = setInterval(function() {
         game1.run();
-    },15);
+    },30);
 }
 
