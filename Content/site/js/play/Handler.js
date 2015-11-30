@@ -6,6 +6,7 @@ function Handler(context) {
     this.ObjectList = [];
     this.context = context;
 
+
     this.tick = function() {
         for(var i = 0; i < this.ObjectList.length; i++) {
             this.ObjectList[i].tick();
@@ -25,10 +26,55 @@ function Handler(context) {
     this.removeObject = function(object) {
         this.ObjectList.splice(this.ObjectList.indexOf(object), 1);
     };
-    
-    this.keyAction = function(keyHash) {
+
+    this.keydown = function(e) {
         for(var i = 0; i < this.ObjectList.length; i++) {
-            this.ObjectList[i].keyAction(keyHash);
+            var tempObject = this.ObjectList[i];
+
+            switch(tempObject.id) {
+                case "PLAYER":
+                if (e.keyCode == 37) {
+                    tempObject.moveLeft = 1;
+                }
+                if (e.keyCode == 38) {
+                    tempObject.moveUp = 1;
+                }
+                if (e.keyCode == 39) {
+                    tempObject.moveRight = 1;
+                }
+                if (e.keyCode == 40) {
+                    tempObject.moveDown = 1;
+                }
+                    break;
+                default:
+
+            }
+        }
+    };
+
+    this.keyup = function(e) {
+        for(var i = 0; i < this.ObjectList.length; i++) {
+            var tempObject = this.ObjectList[i];
+            switch(tempObject.id) {
+                case "PLAYER":
+                    if (e.keyCode == 37) {
+                        tempObject.moveLeft = 0;
+                    }
+                    if (e.keyCode == 38) {
+                        tempObject.moveUp = 0;
+                    }
+                    if (e.keyCode == 39) {
+                        tempObject.moveRight = 0;
+                    }
+                    if (e.keyCode == 40) {
+                        tempObject.moveDown = 0;
+                    }
+                    break;
+                default:
+
+            }
         }
     }
+
+
 }

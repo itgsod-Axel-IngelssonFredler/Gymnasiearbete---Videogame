@@ -11,39 +11,35 @@ function Game(canvas) {
     var fps = 0;
     var time = new Date().getTime();
     var pastTime = new Date().getTime();
-    var deltaTime = 0;
-    var keyHash = {};
-    this.handler = new Handler(context,keyHash);
-    window.addEventListener("keydown", function(e) {
-        e.preventDefault();
-        keyHash[e.keyCode] = 1;
-    },false);
+    deltaTime = 0;
+    this.state = 0;
 
-    window.addEventListener("keyup", function(e) {
-        keyHash[e.keyCode] = 0;
-    }, false);
+
+    this.handler = new Handler(context);
+
+
 
     this.run = function() {
         time = new Date().getTime();
-        deltaTime += time-pastTime;
-        this.keyAction();
+        deltaTime = time-pastTime;
         this.tick();
         this.draw();
         frames++;
-        if(deltaTime>=1000) {
+        if(deltaTime>=100) {
             fps = frames;
-            deltaTime -= 1000;
+            deltaTime -= 100;
             frames = 0;
         }
+
         pastTime = time;
 
     };
 
     this.draw = function() {
         context.clearRect(0,0,width,height);
-
         context.fillStyle = "#0000FF";
         context.fillRect(0,0,width,height);
+        context.fillText(String(fps),50,50);
         this.handler.draw(context);
     };
 
@@ -51,26 +47,29 @@ function Game(canvas) {
         this.handler.tick();
     };
 
-    this.showKeyHash = function() {
-        console.log(keyHash);
-    };
-
-    this.keyAction = function() {
-        this.handler.keyAction(keyHash);
-    };
 
 
 }
 
-
+var state = 0;
 
 function main() {
     var canvas = document.getElementById("GameCanvas") || document.body.appendChild(document.createElement("canvas"));
     game1 = new Game(canvas);
     var player = new GameObject(0,0,100,175,"#FF0000");
+    player.id = "PLAYER";
+
     game1.handler.addObject(player);
     var loop = setInterval(function() {
         game1.run();
-    },30);
+    },20);
+    document.addEventListener("keydown", function(e) {e.preventDefault(); game1.handler.keydown(e)});
+    document.addEventListener("keyup",  function(e) {game1.handler.keyup(e)});
 }
+
+function setStateMainMenu() {
+
+}
+
+
 

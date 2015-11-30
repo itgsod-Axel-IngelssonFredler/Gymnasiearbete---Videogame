@@ -14,15 +14,8 @@ function GameObject(x,y,width,height,color) {
     this.moveUp = 0;
     this.moveRight = 0;
     this.moveDown = 0;
-    this.speed = 5;
-
-
-
-
-    var actions = {37: "this.moveLeft", 38: "this.moveUp", 39: "this.moveRight", 40: "this.moveDown"};
-
-
-
+    this.speed = 1;
+    this.id = "";
 
 
     this.tick = function() {
@@ -30,20 +23,20 @@ function GameObject(x,y,width,height,color) {
             this.velocityX = 0;
         }
         else if(this.moveLeft == 1) {
-            this.velocityX = -1*this.speed;
+            this.velocityX = -1*this.speed*deltaTime/5;
         }
         else if(this.moveRight == 1) {
-            this.velocityX = this.speed;
+            this.velocityX = this.speed*deltaTime/5;
         }
 
         if((this.moveUp == 1 && this.moveDown == 1) || (this.moveUp == 0 && this.moveDown == 0)) {
             this.velocityY = 0;
         }
         else if(this.moveUp == 1) {
-            this.velocityY = -1*this.speed;
+            this.velocityY = -1*this.speed*deltaTime/5;
         }
         else if(this.moveDown == 1) {
-            this.velocityY = this.speed;
+            this.velocityY = this.speed*deltaTime/5;
         }
 
         this.xPos += this.velocityX;
@@ -53,17 +46,6 @@ function GameObject(x,y,width,height,color) {
     this.draw = function(context) {
         context.fillStyle = this.color;
         context.fillRect(this.xPos,this.yPos,this.objectWidth,this.objectHeight);
-    };
-
-    this.keyAction = function(keyHash) {
-        for(var key in actions) {
-            if(keyHash.hasOwnProperty(key) && keyHash[key] == 1) {
-                eval(actions[key]+"=1");
-            }
-            else if (keyHash.hasOwnProperty(key) && keyHash[key] == 0) {
-                eval(actions[key]+"=0")
-            }
-        }
     };
 
 
