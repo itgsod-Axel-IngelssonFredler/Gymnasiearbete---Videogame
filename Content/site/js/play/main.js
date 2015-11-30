@@ -47,6 +47,8 @@ function Game(canvas) {
         this.handler.tick();
     };
 
+    this.animate
+
 
 
 }
@@ -56,8 +58,16 @@ var state = 0;
 function main() {
     var canvas = document.getElementById("GameCanvas") || document.body.appendChild(document.createElement("canvas"));
     game1 = new Game(canvas);
-    var player = new GameObject(0,0,100,175,"#FF0000");
+    player = new GameObject(0,0,100,175,"#FF0000");
     player.id = "PLAYER";
+
+    var image1 = new Image();
+    image1.src = "./img/runningcat.png";
+    image1.onload = function() {
+        player.animation_Running = new Animation(image1, 512 , 256);
+        player.animation_Running.setCurrentDimensions();
+    };
+
 
     game1.handler.addObject(player);
     var loop = setInterval(function() {
@@ -65,6 +75,7 @@ function main() {
     },20);
     document.addEventListener("keydown", function(e) {e.preventDefault(); game1.handler.keydown(e)});
     document.addEventListener("keyup",  function(e) {game1.handler.keyup(e)});
+
 }
 
 function setStateMainMenu() {
