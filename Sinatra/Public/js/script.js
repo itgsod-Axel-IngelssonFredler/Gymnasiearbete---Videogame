@@ -1,37 +1,12 @@
-function run() {
+function run() {    //This is function that runs when the "onload" 
+                    //event on the body of the site is called
 
-    console.log("Javascript loaded!");
-
-    socket = new WebSocket("ws://localhost:1111","protocolOne");
-
-
-    socket.onopen = function () {
-        console.log("Websocket open!");
-        //window.addEventListener("keydown", function(evt) {socket.send("Key pressed: "+evt.keyCode);})
-
-    };
-
-    socket.onmessage = function(evt) {
-        var msg = evt.data;
-        getResponse();
-        
-    };
-
-}
-
-function testDelay() {
-    sendtime = new Date().getTime();
-    socket.send("ping");
+    socket = new WebSocket("ws://localhost:3030"); //Here we create a "WebSocket" object using the built-in "WebSocket"
     
+    socket.onopen = function() { //This function is attached to the "onopen" event of the socket, 
+                                 //meaning that it will run as soon
+                                 //as the socket is open and ready to be used. 
+        console.log("OPEN!");
+    }
 
-
-}
-
-function getResponse() {
-    responsetime = new Date().getTime();
-    console.log("Delay: "+(responsetime-sendtime)+" ms");
-}
-
-function close() {
-    socket.close();
 }
