@@ -127,7 +127,7 @@ function Tile(name,x,y) {
 }
 
 function Collision(obj1, obj2) {
-	if((obj1.x<=obj2.x+obj2.width && obj1.x>=obj2.x) && (obj1.y<obj2.y+obj2.height && obj1.y>=obj2.y)) {
+	if() {
 		return true;
 	}
 	return false;
