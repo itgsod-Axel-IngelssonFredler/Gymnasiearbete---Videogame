@@ -1,14 +1,25 @@
+var idCount = 0;
+
+//function addEntity() {
+	//idCount+=1;
+	//return idCount;
+//}
+
 function Entity(id, posX, posY, width, height){
     this.id = id;
     this.posX = posX;
     this.posY = posY;
     this.width = width;
     this.height = height;
+    this.speed = 0;
+    this.speedX = 0;
+    this.speedY = 0;
 }
 
 
 function Player(id,posX,posY,width,height) {
     Entity.call(this,id,posX,posY,width,height);
+    
 }
 
 
