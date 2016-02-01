@@ -10,7 +10,7 @@ function KeyInput() {
 		if(this.KEY_LEFT==1) {
 			object.speedX = -object.speed;
 		}
-		else if(this.KEY_RIGHT) {
+		else if(this.KEY_RIGHT==1) {
 			object.speedX = object.speed;
 		}
 		else {
@@ -20,15 +20,13 @@ function KeyInput() {
 		if(this.KEY_UP==1) {
 			object.speedY = -object.speed;
 		}
-		else if(this.KEY_DOWN) {
+		else if(this.KEY_DOWN==1) {
 			object.speedY = object.speed;
 		}
 		else {
 			object.speedY = 0;
 		}
 
-		object.posX += object.speedX;
-		object.posY += object.speedY;
 	}
 
 }

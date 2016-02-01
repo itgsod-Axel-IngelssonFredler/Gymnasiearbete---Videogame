@@ -20,12 +20,15 @@ wss.on("connection", function(ws) { /**
 	var Entities = []; 				//This is the container for ALL objects in the game. We simply initialize it as an empty array.
 	var PreviousEntities;
 
-	var player1 = new Player(0,0,0,50,50);
-	var player2 = new Player(1,0,0,60,60);
-	player1.speed = 5;
+	for(var i = 0; i < 1;i++) {
+		var tempObject = new Player(i,i,i,50,50);
+		tempObject.speed = 2;
+		Entities[tempObject.id] = tempObject;
+	}
+
+	
 	keyinput = new KeyInput();
 
-	Entities[player1.id] = player1;
 	ws.send("init_"+JSON.stringify(Entities));
     function tick() {				/**
     								This function "tick()" can be summarized as the heartbeat of the game. This is the loop 
@@ -51,7 +54,8 @@ wss.on("connection", function(ws) { /**
 
     								**/
     	var sendList = [];
-    	var objectList = Entities;
+
+    	var objectList = Entities.slice(0);
     	
 
     	for(var i = 0; i < objectList.length; i++) { /**
@@ -60,10 +64,38 @@ wss.on("connection", function(ws) { /**
     												 at the exact same time. The reality is however, quite different.
 
     												 Since everything in the game exists within the same array, accessing every object in the game
-    												 can be accomplished with a simple "for"-loop. Because of this
+    												 can be accomplished with a simple "for"-loop. Because of how fast the server computer loops
+    												 through the array, we are never able to see the small delay between the updating of different objects.
     												 **/
-    		keyinput.moveObject(objectList[i]);
-    		if(hasChanged(Entities[i], objectList[i])) { /**
+
+    	var oldObject = {}
+    	for(var key in objectList[i]) {
+    		oldObject[key] = objectList[i][key];
+    	}
+
+    	if(keyinput.KEY_LEFT==1) {
+			objectList[0].speedX = -objectList[0].speed;
+		}
+		else if(keyinput.KEY_RIGHT==1) {
+			objectList[0].speedX = objectList[0].speed;
+		}
+		else {
+			objectList[0].speedX = 0;
+		}
+
+		if(keyinput.KEY_UP==1) {
+			objectList[0].speedY = -objectList[0].speed;
+		}
+		else if(keyinput.KEY_DOWN==1) {
+			objectList[0].speedY = objectList[0].speed;
+		}
+		else {
+			objectList[0].speedY = 0;
+		}
+    		objectList[i].tick();
+
+
+    		if(hasChanged(oldObject, objectList[i])) { /**
     													Because our internet connection is rather limited, the game is constructed to
     													only utilize the websocket when it's absolutely necessary. The array sendList (initialized at around row 53)
     													only contains the objects that have changed in some way. While this kind of searching for changes within
@@ -73,11 +105,11 @@ wss.on("connection", function(ws) { /**
     			sendList.push(objectList[i]);
     		}
     	}
-    	Entities = objectList;
+    	Entities = objectList.slice(0);
 
     	//console.log(sendList);
     	try {										/**
-    												Because there's a high risk of something going wrong when sending information over the internet,
+    												Because there's a high risk of something going wrong when sending information via the internet,
     												this "try/catch" statement is there to make sure that the entire server doesn't crash if something
     												goes a tiny bit wrong at any point.
     												**/ 
@@ -101,7 +133,7 @@ wss.on("connection", function(ws) { /**
     	setKey(msg);
     });
     console.log("Opened once");
-    setInterval(function() {tick()}, 15);
+    setInterval(function() {tick()}, 16.67);
 
 
 
@@ -109,11 +141,10 @@ wss.on("connection", function(ws) { /**
 
 function hasChanged(previous, current) {
 	for(var key in current) {
-		//console.log(current);
-		//console.log(previous);
-		if(previous.key!=current[key]) {
+		var previousValue = previous[key];
+		var currentValue = current[key];
+		if(previousValue!=currentValue) {
 			return true;
-			console.log("Changed!");
 		}
 	}
 	return false;

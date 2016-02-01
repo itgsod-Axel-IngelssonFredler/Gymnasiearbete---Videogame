@@ -38,10 +38,14 @@ function StartGameLoop() {      //This function starts the primary loop for our 
         context.clearRect(0,0,canvas.width,canvas.height);
         context.fillStyle = "#0000FF";
         context.fillRect(0,0,canvas.width,canvas.height);
+        try{
         for(var i = 0; i < EntityList.length; i++) {
             context.fillStyle = "#FF0000";
             context.fillRect(EntityList[i].posX,EntityList[i].posY, EntityList[i].width,EntityList[i].height);
             //context.fillRect(0,0,50,50)
+        }
+        } catch(e) {
+            e.throw
         }
         
     }, 1);      // In the "setInterval" function we use the interval 16.67~ because of the following equation:
@@ -49,16 +53,19 @@ function StartGameLoop() {      //This function starts the primary loop for our 
                     // If we convert that to seconds per frame instead we get: frames/seconds --> seconds/frames, amount of frames per 1 second = 60/1, amount of seconds per 60 frames = 1/60.
                     // Since the "setInterval" function uses miliseconds, the final equation for the interval is: 1000 (ms)/ 60 (fps) ≈ 16.67 (ms per frame)
 
-    return "Game Started!";
+    console.log("Game Started!");
 }
 
 function updateEntities() {
-    for(var i = 0; i < EntityList.length;i++) {
+    for(var i = 0; i < Entities.length;i++) {
            EntityList[i] = Entities[i];
     }
  
     
 }
+
+
+
 
 function keyPressed(event) {
     

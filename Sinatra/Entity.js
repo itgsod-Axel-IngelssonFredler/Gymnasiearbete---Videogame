@@ -14,6 +14,11 @@ function Entity(id, posX, posY, width, height){
     this.speed = 0;
     this.speedX = 0;
     this.speedY = 0;
+
+    this.tick = function() {
+        this.posX += this.speedX;
+        this.posY += this.speedY;
+    }
 }
 
 
