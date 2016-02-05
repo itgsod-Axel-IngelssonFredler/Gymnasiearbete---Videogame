@@ -12,14 +12,7 @@ function run() {    //This is function that runs when the "onload"
     }
 
     socket.onmessage = function(msg) {
-        msgArray = msg.data.split("_");
-        if(msgArray[0]=="init") {
-            console.log("initialized");
-            EntityList = JSON.parse(msgArray[1]);
-            console.log(EntityList);
-        }
-        Entities = JSON.parse(msg.data); //"Entities" contains all the objects in the game that have changed.
-        updateEntities();
+        EntityList = JSON.parse(msg.data); //"Entities" contains all the objects in the game that have changed.
         
     }
     canvas = document.getElementById("canvas"); //Here we create a global variable with the name "canvas"
@@ -52,16 +45,7 @@ function StartGameLoop() {      //This function starts the primary loop for our 
     return "Game Started!";
 }
 
-function updateEntities() {
-    for(var i = 0; i < EntityList.length;i++) {
-           EntityList[i] = Entities[i];
-    }
- 
-    
-}
-
-function keyPressed(event) {
-    
+function keyPressed(event) { 
     socket.send("Pressed:"+event.keyCode);
     event.preventDefault();
 }

@@ -18,15 +18,12 @@ wss.on("connection", function(ws) { /**
 									**/
 
 	var Entities = []; 				//This is the container for ALL objects in the game. We simply initialize it as an empty array.
-	var PreviousEntities;
-
 	var player1 = new Player(0,0,0,50,50);
 	player1.speed = 5;
 	keyinput = new KeyInput();
 
 	Entities[player1.id] = player1;
-	
-	ws.send("init_"+JSON.stringify(Entities));
+
     function tick() {				/**
     								This function "tick()" can be summarized as the heartbeat of the game. This is the loop 
     								that causes things to move. This loop decides what changes in the game. By changing the delay
@@ -50,15 +47,8 @@ wss.on("connection", function(ws) { /**
 
 
     								**/
-    	var sendList = [];
-    	
-    	var oldObject = {}
-
-    	for(var key in objectList[i]) {
-    		oldObject[key] = objectList[i][key];
-    	}
-
-    	for(var i = 0; i < objectList.length; i++) { /**
+    
+    	for(var i = 0; i < Entities.length; i++) { /**
     												 This loop is what causes the game to simultaneously update all objects. 
     												 When you observe the game, it appears that all objects update (move, spawn, disappear etc.)
     												 at the exact same time. The reality is however, quite different.
@@ -66,25 +56,14 @@ wss.on("connection", function(ws) { /**
     												 Since everything in the game exists within the same array, accessing every object in the game
     												 can be accomplished with a simple "for"-loop. Because of this
     												 **/
-    		keyinput.moveObject(objectList[i]);
-    		if(hasChanged(oldObject, objectList[i])) { /**
-    													Because our internet connection is rather limited, the game is constructed to
-    													only utilize the websocket when it's absolutely necessary. The array sendList (initialized at around row 53)
-    													only contains the objects that have changed in some way. While this kind of searching for changes within
-    													single objects can be somewhat taxing for the server, it should perform better than sending the ENTIRE
-    													game across the internet every single frame.
-    													**/
-    			sendList.push(objectList[i]);
-    		}
+    		keyinput.moveObject(Entities[i]);
     	}
-
-    	//console.log(sendList);
     	try {										/**
     												Because there's a high risk of something going wrong when sending information over the internet,
     												this "try/catch" statement is there to make sure that the entire server doesn't crash if something
     												goes a tiny bit wrong at any point.
     												**/ 
-		ws.send(JSON.stringify(sendList));
+		ws.send(JSON.stringify(Entities));
 		}
 		catch(e) {
 
@@ -110,17 +89,6 @@ wss.on("connection", function(ws) { /**
 
 });
 
-function hasChanged(previous, current) {
-	for(var key in current) {
-		//console.log(current);
-		//console.log(previous);
-		if(previous[key]!=current[key]) {
-			return true;
-			console.log("Changed!");
-		}
-	}
-	return false;
-}
 
 function setKey(message) {
 	var msg = message.split(":");
