@@ -74,7 +74,7 @@ wss.on("connection", function(ws) { /**
     	
     	for(var key in objectList[i]) {
     		oldObject[key] = objectList[i][key];
-
+    	}
     	//objectList[i].tick();
     	var collides = false;
     	player = objectList[0];
