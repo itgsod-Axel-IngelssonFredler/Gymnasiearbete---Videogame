@@ -5,7 +5,13 @@ WebsocketServer = require("ws").Server;		/** This adds the "ws" module to this f
                                             and uses the "Server" part of it. **/
 Entity = require('./Entity').Entity;
 Player = require('./Entity').Player;
+Enemy = require('./Entity').Enemy;
+
 KeyInput = require('./KeyInput').KeyInput;
+
+Lifebar = require('./HUD').Lifebar;
+Extralives = require('./HUD').Extralives;
+Score = require('./HUD').Score;
 
 wss = new WebsocketServer({port:4040});		//Here we create a new object from the previously obtained websocket server
 
@@ -18,11 +24,16 @@ wss.on("connection", function(ws) { /**
 									**/
 
 	var Entities = []; 				//This is the container for ALL objects in the game. We simply initialize it as an empty array.
-	var player1 = new Player(0,0,0,50,50);
+	var player1 = new Player(400,400,30,40);
+	var enemy1 = new Enemy(400,50,30,40);
+	var lifebar = new Lifebar(300,500,100,100,50)
+
 	player1.speed = 5;
 	keyinput = new KeyInput();
 
-	Entities[player1.id] = player1;
+	Entities.push(player1);
+	Entities.push(enemy1);
+	Entities.push(lifebar);
 
     function tick() {				/**
     								This function "tick()" can be summarized as the heartbeat of the game. This is the loop 
@@ -56,7 +67,7 @@ wss.on("connection", function(ws) { /**
     												 Since everything in the game exists within the same array, accessing every object in the game
     												 can be accomplished with a simple "for"-loop. Because of this
     												 **/
-    		keyinput.moveObject(Entities[i]);
+    		Entities[i].tick(keyinput);
     	}
     	try {										/**
     												Because there's a high risk of something going wrong when sending information over the internet,

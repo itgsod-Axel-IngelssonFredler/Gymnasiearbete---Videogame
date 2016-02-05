@@ -29,10 +29,10 @@ function StartGameLoop() {      //This function starts the primary loop for our 
 
     interval = setInterval(function() {
         context.clearRect(0,0,canvas.width,canvas.height);
-        context.fillStyle = "#0000FF";
+        context.fillStyle = "#000000";
         context.fillRect(0,0,canvas.width,canvas.height);
         for(var i = 0; i < EntityList.length; i++) {
-            context.fillStyle = "#FF0000";
+            context.fillStyle = EntityList[i].color;
             context.fillRect(EntityList[i].posX,EntityList[i].posY, EntityList[i].width,EntityList[i].height);
             //context.fillRect(0,0,50,50)
         }
