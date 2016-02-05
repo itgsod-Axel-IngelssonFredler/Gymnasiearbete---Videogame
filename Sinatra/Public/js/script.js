@@ -40,8 +40,10 @@ function StartGameLoop() {      //This function starts the primary loop for our 
         context.fillRect(0,0,canvas.width,canvas.height);
         try{
         for(var i = 0; i < EntityList.length; i++) {
-            context.fillStyle = "#FF0000";
+
+            context.fillStyle = EntityList[i].color;
             context.fillRect(EntityList[i].posX,EntityList[i].posY, EntityList[i].width,EntityList[i].height);
+            context.fillStyle = "#000000";
             //context.fillRect(0,0,50,50)
         }
         } catch(e) {

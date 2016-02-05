@@ -20,11 +20,13 @@ wss.on("connection", function(ws) { /**
 	var Entities = []; 				//This is the container for ALL objects in the game. We simply initialize it as an empty array.
 	var PreviousEntities;
 
-	for(var i = 0; i < 1;i++) {
-		var tempObject = new Player(i,i,i,50,50);
-		tempObject.speed = 2;
-		Entities[tempObject.id] = tempObject;
-	}
+	var player = new Player(0,0,0,50,50,"green");
+	var groundTile1 = new Entity(1,0,350,150,50)
+	player.speed = 5;
+	Entities[player.id] = player;
+	Entities[groundTile1.id] = groundTile1;
+	var gravity = 1.2;
+
 
 	
 	keyinput = new KeyInput();
@@ -69,32 +71,30 @@ wss.on("connection", function(ws) { /**
     												 **/
 
     	var oldObject = {}
+    	
     	for(var key in objectList[i]) {
     		oldObject[key] = objectList[i][key];
+
+    	//objectList[i].tick();
+    	var collides = false;
+    	player = objectList[0];
+    	for(var a = 0; a < objectList.length; a++) {
+    		thisObject = objectList[0];
+    		otherObject = objectList[a]
+    		if(thisObject==otherObject) {
+    			continue;
+    		}
+      		if (thisObject.x < otherObject.x + otherObject.width &&
+   			 thisObject.x + thisObject.width > otherObject.x &&
+  			 thisObject.y < otherObject.y + otherObject.height &&
+  			 thisObject.height + thisObject.y > otherObject.y) {
+   			 console.log("Collision");
+        	 thisObject.collision = true;
+			}		
     	}
-
-    	if(keyinput.KEY_LEFT==1) {
-			objectList[0].speedX = -objectList[0].speed;
-		}
-		else if(keyinput.KEY_RIGHT==1) {
-			objectList[0].speedX = objectList[0].speed;
-		}
-		else {
-			objectList[0].speedX = 0;
-		}
-
-		if(keyinput.KEY_UP==1) {
-			objectList[0].speedY = -objectList[0].speed;
-		}
-		else if(keyinput.KEY_DOWN==1) {
-			objectList[0].speedY = objectList[0].speed;
-		}
-		else {
-			objectList[0].speedY = 0;
-		}
-    		objectList[i].tick();
-
-
+		objectList[i].tick();
+		keyinput.moveObject(objectList[i]);
+		
     		if(hasChanged(oldObject, objectList[i])) { /**
     													Because our internet connection is rather limited, the game is constructed to
     													only utilize the websocket when it's absolutely necessary. The array sendList (initialized at around row 53)
@@ -150,6 +150,14 @@ function hasChanged(previous, current) {
 	return false;
 }
 
+function intersection(object1,object2){
+	if(object1.posX<object2.posX+object2.width&&object1.posX+object1.width>object2.posX&&object1.posY<object2.posY+object2.height&&object1.posY+object1.height>object2.posY) {
+		return true;
+	}
+	else {
+	return false;
+	}
+}
 function setKey(message) {
 	var msg = message.split(":");
 	if(msg[0]=="Pressed") {
