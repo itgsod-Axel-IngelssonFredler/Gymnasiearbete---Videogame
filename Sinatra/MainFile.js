@@ -6,6 +6,7 @@ WebsocketServer = require("ws").Server;		/** This adds the "ws" module to this f
 Entity = require('./Entity').Entity;
 Player = require('./Entity').Player;
 Enemy = require('./Entity').Enemy;
+Particle = require('./Entity').Particle
 
 KeyInput = require('./KeyInput').KeyInput;
 
@@ -26,13 +27,15 @@ wss.on("connection", function(ws) { /**
 	var Entities = []; 				//This is the container for ALL objects in the game. We simply initialize it as an empty array.
 	var player1 = new Player(400,400,30,40);
 	var enemy1 = new Enemy(400,50,30,40);
-	var lifebar = new Lifebar(300,500,100,100,50)
+	var lifebar_background = new Entity(300,500,200,20,"red");
+	var lifebar = new Lifebar(300,500,100,150,20,"yellow",lifebar_background);
 
 	player1.speed = 5;
 	keyinput = new KeyInput();
 
 	Entities.push(player1);
 	Entities.push(enemy1);
+	Entities.push(lifebar_background);
 	Entities.push(lifebar);
 
     function tick() {				/**
@@ -68,6 +71,18 @@ wss.on("connection", function(ws) { /**
     												 can be accomplished with a simple "for"-loop. Because of this
     												 **/
     		Entities[i].tick(keyinput);
+    		if(Entities[i].hasOwnProperty("deleted")&&Entities[i].deleted) {
+    			Entities[i].splice(i,1);
+    		}
+    		if(Entities[i].projectiles!=undefined) {
+    			for(var a = 0; a < Entities[i].projectiles.length;a++) {
+    			Entities.push(Entities[i].projectiles[a]);
+    			}
+    			Entities[i].projectiles = [];
+    		}
+    		
+
+
     	}
     	try {										/**
     												Because there's a high risk of something going wrong when sending information over the internet,
@@ -117,6 +132,9 @@ function setKey(message) {
 			case "40":
 				keyinput.KEY_DOWN = 1;
 			break;
+			case "32":
+				keyinput.KEY_SPACE = 1;
+			break;
 			default:;
 		}
 	}
@@ -133,6 +151,9 @@ function setKey(message) {
 			break;
 			case "40":
 				keyinput.KEY_DOWN = 0;
+			break;
+			case "32":
+				keyinput.KEY_SPACE = 0;
 			break;
 			default:;
 		}
