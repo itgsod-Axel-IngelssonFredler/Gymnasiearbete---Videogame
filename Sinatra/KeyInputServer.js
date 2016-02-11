@@ -70,7 +70,7 @@ wss.on("connection", function(ws) {
 
 			for(var i = 0; i<Entities.length; i++) {
 
-			object = Entities[i]
+			object = Entities[i];
 			switch(object.class) {
 				case Player():
 
