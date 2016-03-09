@@ -8,7 +8,7 @@ var tickInterval;
 
 wss.on("connection", function(ws) {
 
-	Entities = [] //This initializes the array that contains all game entities
+	var Entities = [] //This initializes the array that contains all game entities
 	var Player1 = new Player("Player1",0,0,50,50);
 	var Player2 = new Player("Player2",10,10,50,50)
 
@@ -101,7 +101,7 @@ wss.on("connection", function(ws) {
 			object.y += object.velY;
 		}
 		lastTime = currentTime;
-	}, 5);
+	}, 16.67);
 	interval = setInterval(function() {
 
 		try {
@@ -110,7 +110,7 @@ wss.on("connection", function(ws) {
 		}
 		catch(e) {}
 	
-	}, 0);
+	}, 16.67);
 
 
 });

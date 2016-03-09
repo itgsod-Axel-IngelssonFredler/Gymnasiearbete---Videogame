@@ -13,6 +13,9 @@ KeyInput = require('./KeyInput').KeyInput;
 Lifebar = require('./HUD').Lifebar;
 Extralives = require('./HUD').Extralives;
 Score = require('./HUD').Score;
+windowWidth = 800;
+windowHeight = 550;
+tickspeed = 16.67;
 
 wss = new WebsocketServer({port:4040});		//Here we create a new object from the previously obtained websocket server
 
@@ -24,15 +27,13 @@ wss.on("connection", function(ws) { /**
 									such as particles from weapons or attacks.
 									**/
 
-	var Entities = []; 				//This is the container for ALL objects in the game. We simply initialize it as an empty array.
+	Entities = []; 					//This is the container for ALL objects in the game. We simply initialize it as an empty array.
 	var player1 = new Player(400,400,30,40);
 	var enemy1 = new Enemy(400,50,30,40);
 	var lifebar_background = new Entity(300,500,200,20,"red");
 	var lifebar = new Lifebar(300,500,100,150,20,"yellow",lifebar_background);
-
 	player1.speed = 5;
 	keyinput = new KeyInput();
-
 	Entities.push(player1);
 	Entities.push(enemy1);
 	Entities.push(lifebar_background);
@@ -61,6 +62,8 @@ wss.on("connection", function(ws) { /**
 
 
     								**/
+
+
     
     	for(var i = 0; i < Entities.length; i++) { /**
     												 This loop is what causes the game to simultaneously update all objects. 
@@ -70,20 +73,12 @@ wss.on("connection", function(ws) { /**
     												 Since everything in the game exists within the same array, accessing every object in the game
     												 can be accomplished with a simple "for"-loop. Because of this
     												 **/
-    		Entities[i].tick(keyinput);
-    		if(Entities[i].hasOwnProperty("deleted")&&Entities[i].deleted) {
-    			Entities[i].splice(i,1);
-    		}
-    		if(Entities[i].projectiles!=undefined) {
-    			for(var a = 0; a < Entities[i].projectiles.length;a++) {
-    			Entities.push(Entities[i].projectiles[a]);
-    			}
-    			Entities[i].projectiles = [];
-    		}
-    		
-
-
+    		Entities[i].tick();
+			if(Entities[i].deleted==true) {
+				Entities.slice(i,1);
+			}
     	}
+
     	try {										/**
     												Because there's a high risk of something going wrong when sending information over the internet,
     												this "try/catch" statement is there to make sure that the entire server doesn't crash if something
@@ -108,12 +103,18 @@ wss.on("connection", function(ws) { /**
 
     	setKey(msg);
     });
-    console.log("Opened once");
-    setInterval(function() {tick()}, 15);
 
+
+    console.log("Opened once");
+    var interval = setInterval(function() {tick()}, tickspeed);
+    
+    ws.on("close", function() {
+    	clearInterval(interval);
+	})
 
 
 });
+
 
 
 function setKey(message) {

@@ -1,9 +1,10 @@
-var idCount = 0;
+Game = require("./MainFile");
+Tickspeed = Game.tickspeed;
+Entities = Game.Entities;
+Deltatime = Game.deltaTime;
+keyinput = Game.keyinput;
 
-//function addEntity() {
-	//idCount+=1;
-	//return idCount;
-//}
+console.log(Tickspeed);
 
 function Entity(posX, posY, width, height){
     this.posX = posX;
@@ -13,11 +14,9 @@ function Entity(posX, posY, width, height){
     this.speed = 0;
     this.speedX = 0;
     this.speedY = 0;
+    this.deleted = false;
 
-    this.tick = function(keyinput) {
-        if(this.posY>=550) {
-            delete this;
-        }
+    this.tick = function() {
         this.posX += this.speedX;
         this.posY += this.speedY;
     }
@@ -27,14 +26,24 @@ function Entity(posX, posY, width, height){
 function Player(posX,posY,width,height,entities) {
     Entity.call(this,posX,posY,width,height);
     this.color = "green";
-    this.firing = 0;
-    this.firerate = 100;
+    this.firerate = 3;
     this.projectileSpeed = -10;
-    this.projectiles = [];
+    var fireCooldown = 0;
+     
+
+        this.fire = function() {
+            console.log("firing");
+            with(this) {
+            var particle = new Particle(posX+width/2,posY,1,20);        
+            particle.speedY = this.projectileSpeed;
+            Entities.push(particle);
+            }    
+        }
 
 
+       this.tick = function() {
+        fireCooldown -= Tickspeed;
 
-       this.tick = function(keyinput) {
         if(keyinput.KEY_LEFT==1) {
             this.speedX = -this.speed;
         }
@@ -55,21 +64,14 @@ function Player(posX,posY,width,height,entities) {
             this.speedY = 0;
         }
 
-        if(keyinput.KEY_SPACE==1) {
+        if(keyinput.KEY_SPACE==1&&fireCooldown<=0) {
             with(this) {
-                    var particle = new Particle(posX+width/2,posY,10,10);
-                    particle.speedY = projectileSpeed;
-                    projectiles.push(particle);  
+               fire();
+               fireCooldown = 1000/firerate;
             }
-           
-
+            
         }
         else {
-            try {
-                clearInterval(interval);
-            } catch(e) {
-               
-            }
         }
 
         this.posX += this.speedX;
@@ -99,13 +101,16 @@ function Enemy(posX,posY,width,height) {
 }
 
 function Particle(posX,posY,width,height) {
-    this.deleted = false;
+    this.color = "#FF00FF";
     Entity.call(this,posX,posY,width,height);
-    this.tick = function(keyinput) {
-        if(this.posY>=550) {
+
+    this.tick = function() {
+        this.posY += parseInt(this.speedY);
+        if(this.posY>=Game.windowHeight) {
             this.deleted = true;
         }
     }
+
 }
 
 
