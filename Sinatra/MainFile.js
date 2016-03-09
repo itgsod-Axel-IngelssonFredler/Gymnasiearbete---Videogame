@@ -2,7 +2,8 @@
  * Created by axel.ingelssonfredle on 15/01/16.
  */
 WebsocketServer = require("ws").Server;		/** This adds the "ws" module to this file
-                                            and uses the "Server" part of it. **/
+                                           and uses the "Server" part of it. **/
+tickspeed = 16.67;
 Entity = require('./Entity').Entity;
 Player = require('./Entity').Player;
 Enemy = require('./Entity').Enemy;
@@ -15,7 +16,7 @@ Extralives = require('./HUD').Extralives;
 Score = require('./HUD').Score;
 windowWidth = 800;
 windowHeight = 550;
-tickspeed = 16.67;
+
 
 wss = new WebsocketServer({port:4040});		//Here we create a new object from the previously obtained websocket server
 
@@ -27,17 +28,21 @@ wss.on("connection", function(ws) { /**
 									such as particles from weapons or attacks.
 									**/
 
-	Entities = []; 					//This is the container for ALL objects in the game. We simply initialize it as an empty array.
-	var player1 = new Player(400,400,30,40);
+	
+	/**var Entities = []; 	**/			//This is the container for ALL objects in the game. We simply initialize it as an empty array.
+	/**var player1 = new Player(400,400,30,40);
 	var enemy1 = new Enemy(400,50,30,40);
 	var lifebar_background = new Entity(300,500,200,20,"red");
 	var lifebar = new Lifebar(300,500,100,150,20,"yellow",lifebar_background);
 	player1.speed = 5;
-	keyinput = new KeyInput();
+	var keyinput = new KeyInput();
 	Entities.push(player1);
 	Entities.push(enemy1);
 	Entities.push(lifebar_background);
-	Entities.push(lifebar);
+	Entities.push(lifebar);**/
+
+	var game = new Game();
+	var Entities = game.Entities;
 
     function tick() {				/**
     								This function "tick()" can be summarized as the heartbeat of the game. This is the loop 
@@ -73,7 +78,7 @@ wss.on("connection", function(ws) { /**
     												 Since everything in the game exists within the same array, accessing every object in the game
     												 can be accomplished with a simple "for"-loop. Because of this
     												 **/
-    		Entities[i].tick();
+    		Entities[i].tick(game.keyinput,Entities);
 			if(Entities[i].deleted==true) {
 				Entities.slice(i,1);
 			}
@@ -101,7 +106,7 @@ wss.on("connection", function(ws) { /**
     									released.
     									**/
 
-    	setKey(msg);
+    	setKey(game,msg);
     });
 
 
@@ -116,9 +121,27 @@ wss.on("connection", function(ws) { /**
 });
 
 
+function Game() {
+	this.Entities = []; 				//This is the container for ALL objects in the game. We simply initialize it as an empty array.
+	var player1 = new Player(400,400,30,40);
+	var enemy1 = new Enemy(400,50,30,40);
+	var lifebar_background = new Entity(300,500,200,20,"red");
+	var lifebar = new Lifebar(300,500,100,150,20,"yellow",lifebar_background);
+	player1.speed = 5;
+	this.keyinput = new KeyInput();
+	with(this) {
+	Entities.push(player1);
+	Entities.push(enemy1);
+	Entities.push(lifebar_background);
+	Entities.push(lifebar);	
+	}
+	
+}
 
-function setKey(message) {
+
+function setKey(game,message) {
 	var msg = message.split(":");
+	var keyinput = game.keyinput;
 	if(msg[0]=="Pressed") {
 		switch(msg[1]) {
 			case "37":

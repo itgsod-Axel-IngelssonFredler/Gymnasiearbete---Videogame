@@ -1,8 +1,5 @@
 Game = require("./MainFile");
 Tickspeed = Game.tickspeed;
-Entities = Game.Entities;
-Deltatime = Game.deltaTime;
-keyinput = Game.keyinput;
 
 console.log(Tickspeed);
 
@@ -23,7 +20,7 @@ function Entity(posX, posY, width, height){
 }
 
 
-function Player(posX,posY,width,height,entities) {
+function Player(posX,posY,width,height) {
     Entity.call(this,posX,posY,width,height);
     this.color = "green";
     this.firerate = 3;
@@ -41,7 +38,7 @@ function Player(posX,posY,width,height,entities) {
         }
 
 
-       this.tick = function() {
+       this.tick = function(keyinput) {
         fireCooldown -= Tickspeed;
 
         if(keyinput.KEY_LEFT==1) {
@@ -86,6 +83,7 @@ function Enemy(posX,posY,width,height) {
     this.color = "red";
     this.speedX = 3;
     this.speedY = 0;
+    this.testVariable = 0;
 
     this.tick = function() {
         with(this) {
