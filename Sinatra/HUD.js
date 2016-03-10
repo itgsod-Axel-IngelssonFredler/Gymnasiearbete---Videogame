@@ -47,10 +47,7 @@ function Score(x,y,width,height) {
 	this.height = height;
 }
 
-function Basic_HUD(x,y,width,height) {
-	this.image = document.getElementbyID("HUD_Basic_2");
 
-}
 
 exports.Lifebar = Lifebar;
 exports.Extralives = Extralives;

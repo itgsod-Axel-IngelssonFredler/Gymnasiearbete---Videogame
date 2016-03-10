@@ -11,7 +11,6 @@ function run() {    //This is function that runs when the "onload"
     }
 
     socket.onmessage = function(msg) {
-        console.log(msg);
         EntityList = JSON.parse(msg.data); //"Entities" contains all the objects in the game.
         
     }
@@ -31,6 +30,11 @@ function StartGameLoop() {      //This function starts the primary loop for our 
         context.clearRect(0,0,canvas.width,canvas.height);
         context.fillStyle = "#000000";
         context.fillRect(0,0,canvas.width,canvas.height);
+       // var basic_hud = document.getElementbyID("HUD_Basic_2").style.backgroundImage = "img/HUD_Basic_2.png";
+        var hud = new Image("img/HUD_Basic_2.png");
+        var hud_element = document.createElement("img");
+        hud_element.src = "img/HUD_Basic_2.png";
+        context.drawImage(hud_element,0,0);
         for(var i = 0; i < EntityList.length; i++) {
             context.fillStyle = EntityList[i].color;
             context.fillRect(EntityList[i].posX,EntityList[i].posY, EntityList[i].width,EntityList[i].height);
@@ -57,4 +61,9 @@ function keyReleased(event) {
 function StopGameLoop() {       //This function stops the game loop. 
     clearInterval(interval);
     return "Game Stopped!"
+}
+
+function Basic_HUD(x,y,width,height) {
+   // var basic_hud = document.getElementbyID("HUD_Basic_2").style.backgroundImage = "img/HUD_Basic_2.png";
+
 }
