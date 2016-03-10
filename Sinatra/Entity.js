@@ -14,8 +14,8 @@ function Entity(posX, posY, width, height){
     this.deleted = false;
 
     this.tick = function() {
-        this.posX += this.speedX;
-        this.posY += this.speedY;
+        this.posX += this.speedX*Tickspeed;
+        this.posY += this.speedY*Tickspeed;
     }
 }
 
@@ -23,21 +23,24 @@ function Entity(posX, posY, width, height){
 function Player(posX,posY,width,height) {
     Entity.call(this,posX,posY,width,height);
     this.color = "green";
-    this.firerate = 1000;
-    this.projectileSpeed = -40;
+    this.firerate = 5;
+    this.projectileSpeed = -10;
     var fireCooldown = 0;
-    var firing = 1;
+    var shotsPerFire = 4;
      
 
         this.fire = function(Entities) {
             with(this) {
-            var particleWidth = 10;
-            var particleHeight = 20;
-            var accuracy = 0.9;
-            var particle = new Particle(posX+width/2-particleWidth/2,posY-particleHeight,particleWidth,particleHeight);        
-            particle.speedY = this.projectileSpeed;
-            particle.speedX = Math.random(1-accuracy)*2-Math.random(1-accuracy)*2;
-            Entities.push(particle);
+            var particleWidth = 2;
+            var particleHeight = 10;
+            var accuracy = 0.95;
+            for(var i = 0; i < shotsPerFire; i++) {
+                var particle = new Particle(posX+width/2-particleWidth/2,posY-particleHeight,particleWidth,particleHeight);        
+                particle.speedY = this.projectileSpeed;
+                particle.speedX = Math.random(1-accuracy)*2-Math.random(1-accuracy)*2;
+                Entities.push(particle);   
+            }
+            
             }    
         }
 
@@ -88,6 +91,7 @@ function Enemy(posX,posY,width,height) {
     this.speedX = 3;
     this.speedY = 0;
     this.testVariable = 0;
+    
 
     this.tick = function() {
         with(this) {
@@ -107,8 +111,8 @@ function Particle(posX,posY,width,height) {
     Entity.call(this,posX,posY,width,height);
 
     this.tick = function() {
-        this.posY += parseInt(this.speedY);
-        this.posX += parseInt(this.speedX);
+        this.posY += this.speedY;
+        this.posX += this.speedX;
         if(this.posY>=Game.windowHeight) {
             this.deleted = true;
         }
