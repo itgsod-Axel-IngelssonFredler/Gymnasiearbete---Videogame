@@ -3,7 +3,6 @@ function Lifebar(x,y,maxhealth,width,height,color,background) {
 	this.posY = y;
 	this.maxhealth = maxhealth;
 	this.currentHealth = maxhealth;
-	console.log(this.currentHealth);
 	this.background = background;
 	this.width = width;
 	this.height = height;

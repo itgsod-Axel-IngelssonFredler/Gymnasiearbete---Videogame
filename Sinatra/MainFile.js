@@ -40,7 +40,7 @@ wss.on("connection", function(ws) { /**
 	Entities.push(enemy1);
 	Entities.push(lifebar_background);
 	Entities.push(lifebar);**/
-
+	console.log("A client has connected. IP: "+ws.IP);
 	var game = new Game();
 	var Entities = game.Entities;
 
@@ -78,7 +78,7 @@ wss.on("connection", function(ws) { /**
     												 Since everything in the game exists within the same array, accessing every object in the game
     												 can be accomplished with a simple "for"-loop. Because of this
     												 **/
-    		Entities[i].tick(game.keyinput,Entities);
+    		Entities[i].tick(Entities,game.keyinput);
 			if(Entities[i].deleted==true) {
 				Entities.slice(i,1);
 			}
@@ -110,7 +110,7 @@ wss.on("connection", function(ws) { /**
     });
 
 
-    console.log("Opened once");
+    
     var interval = setInterval(function() {tick()}, tickspeed);
     
     ws.on("close", function() {
@@ -125,7 +125,8 @@ function Game() {
 	this.Entities = []; 				//This is the container for ALL objects in the game. We simply initialize it as an empty array.
 	var player1 = new Player(400,400,30,40);
 	var enemy1 = new Enemy(400,50,30,40);
-	var lifebar_background = new Entity(300,500,200,20,"red");
+	var lifebar_background = new Entity(300,500,200,20);
+	lifebar_background.color = "blue";
 	var lifebar = new Lifebar(300,500,100,150,20,"yellow",lifebar_background);
 	player1.speed = 5;
 	this.keyinput = new KeyInput();
