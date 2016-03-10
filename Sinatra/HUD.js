@@ -47,6 +47,8 @@ function Score(x,y,width,height) {
 	this.height = height;
 }
 
+
+
 exports.Lifebar = Lifebar;
 exports.Extralives = Extralives;
 exports.Score = Score;

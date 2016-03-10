@@ -11,7 +11,7 @@ Enemy = require('./Entity').Enemy;
 Particle = require('./Entity').Particle
 
 KeyInput = require('./KeyInput').KeyInput;
-
+Basic_HUD = require('./HUD').Basic_HUD;
 Lifebar = require('./HUD').Lifebar;
 Extralives = require('./HUD').Extralives;
 Score = require('./HUD').Score;

@@ -11,7 +11,6 @@ function run() {    //This is function that runs when the "onload"
     }
 
     socket.onmessage = function(msg) {
-        socket.send("Received data!");
         EntityList = JSON.parse(msg.data); //"Entities" contains all the objects in the game.
         
     }
@@ -31,6 +30,10 @@ function StartGameLoop() {      //This function starts the primary loop for our 
         context.clearRect(0,0,canvas.width,canvas.height);
         context.fillStyle = "#000000";
         context.fillRect(0,0,canvas.width,canvas.height);
+       // var basic_hud = document.getElementbyID("HUD_Basic_2").style.backgroundImage = "img/HUD_Basic_2.png";
+        var hud = new Image("img/HUD_Basic_2.png");
+        var hud_element = document.createElement("img");
+        hud_element.src = "img/HUD_Basic_2.png";
         for(var i = 0; i < EntityList.length; i++) {
             
             context.fillStyle = EntityList[i].color;
@@ -39,6 +42,8 @@ function StartGameLoop() {      //This function starts the primary loop for our 
             EntityList[i].posY += EntityList[i].speedY;
             //context.fillRect(0,0,50,50)
         }
+
+        context.drawImage(hud_element,0,0);
         
     }, 16.67);      // In the "setInterval" function we use the interval 16.67~ because of the following equation:
                     // Our target frames per second = 60
@@ -61,3 +66,4 @@ function StopGameLoop() {       //This function stops the game loop.
     clearInterval(interval);
     return "Game Stopped!"
 }
+
