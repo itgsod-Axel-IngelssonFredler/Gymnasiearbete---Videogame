@@ -34,12 +34,13 @@ function StartGameLoop() {      //This function starts the primary loop for our 
         var hud = new Image("img/HUD_Basic_2.png");
         var hud_element = document.createElement("img");
         hud_element.src = "img/HUD_Basic_2.png";
-        context.drawImage(hud_element,0,0);
         for(var i = 0; i < EntityList.length; i++) {
             context.fillStyle = EntityList[i].color;
             context.fillRect(EntityList[i].posX,EntityList[i].posY, EntityList[i].width,EntityList[i].height);
             //context.fillRect(0,0,50,50)
         }
+
+        context.drawImage(hud_element,0,0);
         
     }, 16.67);      // In the "setInterval" function we use the interval 16.67~ because of the following equation:
                     // Our target frames per second = 60
@@ -63,7 +64,3 @@ function StopGameLoop() {       //This function stops the game loop.
     return "Game Stopped!"
 }
 
-function Basic_HUD(x,y,width,height) {
-   // var basic_hud = document.getElementbyID("HUD_Basic_2").style.backgroundImage = "img/HUD_Basic_2.png";
-
-}
