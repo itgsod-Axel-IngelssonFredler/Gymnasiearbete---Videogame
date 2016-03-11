@@ -41,8 +41,7 @@ function Player(posX,posY,width,height) {
                 Entities.push(particle);
             }
             }
-            }    
-        }
+        }    
 
 
        this.tick = function(Entities,keyinput) {
@@ -81,7 +80,6 @@ function Player(posX,posY,width,height) {
         this.posX += this.speedX;
         this.posY += this.speedY;
     }
-    
 
 }
 
