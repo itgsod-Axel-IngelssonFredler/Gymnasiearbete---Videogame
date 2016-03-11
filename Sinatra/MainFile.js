@@ -3,7 +3,8 @@
  */
 WebsocketServer = require("ws").Server;		/** This adds the "ws" module to this file
                                            and uses the "Server" part of it. **/
-tickspeed = 16.67;
+
+updateDelay = 30;
 Entity = require('./Entity').Entity;
 Player = require('./Entity').Player;
 Enemy = require('./Entity').Enemy;
@@ -41,7 +42,9 @@ wss.on("connection", function(ws) { /**
 	Entities.push(lifebar_background);
 	Entities.push(lifebar);**/
 	console.log("A client has connected. IP: "+ws.IP);
+	Game.tickspeed = 16.67;
 	var game = new Game();
+	var lastMessage = 0;
 	var Entities = game.Entities;
 
     function tick() {				/**
@@ -84,7 +87,11 @@ wss.on("connection", function(ws) { /**
 			}
     	}
 
-    	try {										/**
+    	
+	}
+
+	function sendUpdate() {
+		try {										/**
     												Because there's a high risk of something going wrong when sending information over the internet,
     												this "try/catch" statement is there to make sure that the entire server doesn't crash if something
     												goes a tiny bit wrong at any point.
@@ -106,15 +113,24 @@ wss.on("connection", function(ws) { /**
     									released.
     									**/
 
-    	setKey(game,msg);
+    	if(msg=="Received data!") {
+    		var date = new Date().getTime();
+    		console.log("Delay: "+(date-lastMessage))
+    		lastMessage = (date);
+    	}
+    	else {
+    		setKey(game,msg);	
+    	}
+    	
     });
 
 
     
-    var interval = setInterval(function() {tick()}, tickspeed);
-    
+    var interval = setInterval(function() {tick()}, Game.tickspeed);
+    var sendUpdateInterval = setInterval(function() {sendUpdate()}, updateDelay);
     ws.on("close", function() {
     	clearInterval(interval);
+    	clearInterval(sendUpdateInterval);
 	})
 
 
@@ -123,6 +139,10 @@ wss.on("connection", function(ws) { /**
 
 function Game() {
 	this.Entities = []; 				//This is the container for ALL objects in the game. We simply initialize it as an empty array.
+	this.deltaTime = 0;
+
+	this.lastTime = 0;
+	this.currentTime = 0;
 	var player1 = new Player(400,400,30,40);
 	var enemy1 = new Enemy(400,50,30,40);
 	var lifebar_background = new Entity(300,500,200,20);
