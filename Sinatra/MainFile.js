@@ -5,6 +5,10 @@ WebsocketServer = require("ws").Server;		/** This adds the "ws" module to this f
                                            and uses the "Server" part of it. **/
 
 updateDelay = 30;
+tickspeed = 16.67;
+windowWidth = 800;
+windowHeight = 550;
+
 Entity = require('./Entity').Entity;
 Player = require('./Entity').Player;
 Enemy = require('./Entity').Enemy;
@@ -15,8 +19,7 @@ Basic_HUD = require('./HUD').Basic_HUD;
 Lifebar = require('./HUD').Lifebar;
 Extralives = require('./HUD').Extralives;
 Score = require('./HUD').Score;
-windowWidth = 800;
-windowHeight = 550;
+
 
 
 wss = new WebsocketServer({port:4040});		//Here we create a new object from the previously obtained websocket server
@@ -42,7 +45,7 @@ wss.on("connection", function(ws) { /**
 	Entities.push(lifebar_background);
 	Entities.push(lifebar);**/
 	console.log("A client has connected. IP: "+ws.IP);
-	Game.tickspeed = 16.67;
+
 	var game = new Game();
 	var lastMessage = 0;
 	var Entities = game.Entities;
@@ -126,7 +129,7 @@ wss.on("connection", function(ws) { /**
 
 
     
-    var interval = setInterval(function() {tick()}, Game.tickspeed);
+    var interval = setInterval(function() {tick()}, tickspeed);
     var sendUpdateInterval = setInterval(function() {sendUpdate()}, updateDelay);
     ws.on("close", function() {
     	clearInterval(interval);
@@ -204,3 +207,6 @@ function setKey(game,message) {
 		}
 	}
 }
+
+exports.Game = Game;
+console.log(exports)
