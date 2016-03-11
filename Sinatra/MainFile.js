@@ -84,7 +84,11 @@ wss.on("connection", function(ws) { /**
 			}
     	}
 
-    	try {										/**
+    	
+	}
+
+	function sendUpdate() {
+		try {										/**
     												Because there's a high risk of something going wrong when sending information over the internet,
     												this "try/catch" statement is there to make sure that the entire server doesn't crash if something
     												goes a tiny bit wrong at any point.
@@ -112,6 +116,7 @@ wss.on("connection", function(ws) { /**
 
     
     var interval = setInterval(function() {tick()}, tickspeed);
+    var updateInterval = setInterval(function() {sendUpdate()}, 10); 
     
     ws.on("close", function() {
     	clearInterval(interval);
@@ -125,16 +130,16 @@ function Game() {
 	this.Entities = []; 				//This is the container for ALL objects in the game. We simply initialize it as an empty array.
 	var player1 = new Player(400,400,30,40);
 	var enemy1 = new Enemy(400,50,30,40);
-	var lifebar_background = new Entity(300,500,200,20);
-	lifebar_background.color = "blue";
-	var lifebar = new Lifebar(300,500,100,150,20,"yellow",lifebar_background);
+	//var lifebar_background = new Entity(300,500,200,20);
+	//lifebar_background.color = "blue";
+	//var lifebar = new Lifebar(300,500,100,150,20,"yellow",lifebar_background);
 	player1.speed = 5;
 	this.keyinput = new KeyInput();
 	with(this) {
 	Entities.push(player1);
 	Entities.push(enemy1);
-	Entities.push(lifebar_background);
-	Entities.push(lifebar);	
+	//Entities.push(lifebar_background);
+	//Entities.push(lifebar);	
 	}
 	
 }

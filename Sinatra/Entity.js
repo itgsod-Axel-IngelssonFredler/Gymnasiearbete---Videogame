@@ -23,21 +23,24 @@ function Entity(posX, posY, width, height){
 function Player(posX,posY,width,height) {
     Entity.call(this,posX,posY,width,height);
     this.color = "green";
-    this.firerate = 1000;
-    this.projectileSpeed = -40;
+    this.firerate = 10;
+    this.projectileSpeed = -8;
     var fireCooldown = 0;
     var firing = 1;
+    var projectiles = 1;
      
 
         this.fire = function(Entities) {
             with(this) {
-            var particleWidth = 10;
-            var particleHeight = 20;
-            var accuracy = 0.9;
-            var particle = new Particle(posX+width/2-particleWidth/2,posY-particleHeight,particleWidth,particleHeight);        
-            particle.speedY = this.projectileSpeed;
-            particle.speedX = Math.random(1-accuracy)*2-Math.random(1-accuracy)*2;
-            Entities.push(particle);
+            var particleWidth = 5;
+            var particleHeight = 10;
+            var accuracy = 1;
+            for(var i= 0; i < projectiles; i++) {
+                var particle = new Particle(posX+width/2-particleWidth/2,posY-particleHeight,particleWidth,particleHeight);        
+                particle.speedY = this.projectileSpeed;
+                //particle.speedX = Math.random(1-accuracy)
+                Entities.push(particle);  
+            }  
             }    
         }
 
@@ -103,12 +106,12 @@ function Enemy(posX,posY,width,height) {
 }
 
 function Particle(posX,posY,width,height) {
-    this.color = "#FF00FF";
+    this.color = "#FF5000";
     Entity.call(this,posX,posY,width,height);
 
     this.tick = function() {
-        this.posY += parseInt(this.speedY);
-        this.posX += parseInt(this.speedX);
+        this.posY += this.speedY;
+        this.posX += this.speedX;
         if(this.posY>=Game.windowHeight) {
             this.deleted = true;
         }
