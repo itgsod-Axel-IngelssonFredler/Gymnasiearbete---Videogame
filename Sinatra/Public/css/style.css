@@ -1,3 +1,21 @@
+#main_button_bar {
+	margin: auto;
+	margin-top: 50px;
+	background-color: aqua;
+	width: 800px;
+	height: 100px;
+	padding: 0px;
+}
+
+.button {
+	display: box;
+	height: 100px;
+	width: 160px;
+	background: black;
+	float: left;
+	text-align: center;
+	font: bold 1em/100px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
 #canvas {
 	border:solid black 2px;
 }
@@ -5,9 +23,7 @@
 #canvasDiv {
 	width:800px;
 	height:550px;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 100px;
+	margin: auto;
 }
 
 body {

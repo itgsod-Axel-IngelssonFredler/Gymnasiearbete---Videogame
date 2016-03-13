@@ -13,7 +13,7 @@ windowHeight = 550;
 Entity = require('./Entity').Entity;
 Player = require('./Entity').Player;
 Enemy = require('./Entity').Enemy;
-Particle = require('./Entity').Particle
+Particle = require('./Entity').Particle;
 
 KeyInput = require('./KeyInput').KeyInput;
 Basic_HUD = require('./HUD').Basic_HUD;
