@@ -5,8 +5,9 @@ WebsocketServer = require("ws").Server;		/** This adds the "ws" module to this f
                                            and uses the "Server" part of it. **/
 
 updateDelay = 30;
-
 tickspeed = 16.67;
+
+
 windowWidth = 800;
 windowHeight = 550;
 
@@ -86,9 +87,6 @@ wss.on("connection", function(ws) { /**
     												 can be accomplished with a simple "for"-loop. Because of this
     												 **/
     		Entities[i].tick(Entities,game.keyinput);
-			if(Entities[i].deleted==true) {
-				Entities.slice(i,1);
-			}
     	}
 
     	
