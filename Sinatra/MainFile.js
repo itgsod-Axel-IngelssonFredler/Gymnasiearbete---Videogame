@@ -4,8 +4,9 @@
 WebsocketServer = require("ws").Server;		/** This adds the "ws" module to this file
                                            and uses the "Server" part of it. **/
 
-updateDelay = 30;
+updateDelay = 1;
 tickspeed = 16.67;
+EventListener = require("events");
 
 
 windowWidth = 800;

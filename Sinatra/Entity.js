@@ -1,4 +1,5 @@
 Game = require('./MainFile');
+var events = require('events');
 console.log(Game)
 Tickspeed = tickspeed;
 
@@ -33,6 +34,7 @@ function Player(posX,posY,width,height) {
     var accuracy = 0.8;
     var particleWidth = 0;
     var particleHeight = 0;
+
     this.id = "Player";
         this.fire = function(Entities) {
             with(this) {
@@ -117,10 +119,8 @@ function Particle(posX,posY,width,height,imageSrc) {
     this.collisionCheck = function(object) {
         if (this.posX + this.width > object.posX && object.posX + object.width > this.posX &&
             this.posY + this.height > object.posY && object.posY + object.height > this.posY){
-            console.log("Collision!");
-            object.deleted = true;
-            //object.color = "#FFFF00";
-            console.log(object.deleted);
+            //console.log("Collision!");     
+            object.color = "#FFFF00";
         }
 
             };
