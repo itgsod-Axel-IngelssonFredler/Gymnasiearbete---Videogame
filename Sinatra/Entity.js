@@ -1,6 +1,6 @@
 Game = require('./MainFile');
 console.log(Game)
-Tickspeed = Game.tickspeed;
+Tickspeed = tickspeed;
 
 console.log(Tickspeed);
 
@@ -25,24 +25,24 @@ function Player(posX,posY,width,height) {
     Entity.call(this,posX,posY,width,height);
     this.color = "green";
     this.firerate = 15;
-    this.projectileSpeed = -10;
+    this.projectileSpeed = -5;
     var fireCooldown = 0;
     var shotsPerFire = 1;
+    var accuracy = 0.8;
+    var particleWidth = 0;
+    var particleHeight = 0;
      
         this.fire = function(Entities) {
             with(this) {
-            var particleWidth = 2;
-            var particleHeight = 10;
-            var accuracy = 0.95;
+            
             for(var i = 0; i < shotsPerFire; i++) {
-                var particle = new Particle(posX+width/2-particleWidth/2,posY-particleHeight,particleWidth,particleHeight);        
+                var particle = new Particle(posX+width/2-particleWidth/2,posY-particleHeight,particleWidth,particleHeight,"img/Basic_Rocket.png");        
                 particle.speedY = this.projectileSpeed;
-                //particle.speedX = Math.random(1-accuracy)*2-Math.random(1-accuracy)*2;
+                particle.speedX = (Math.random()*(5+5)-5)*(1-accuracy);
                 Entities.push(particle);
             }
             }
-            }    
-        }
+        }    
 
 
        this.tick = function(Entities,keyinput) {
@@ -81,7 +81,6 @@ function Player(posX,posY,width,height) {
         this.posX += this.speedX;
         this.posY += this.speedY;
     }
-    
 
 }
 
@@ -106,15 +105,17 @@ function Enemy(posX,posY,width,height) {
 
 }
 
-function Particle(posX,posY,width,height) {
+function Particle(posX,posY,width,height,imageSrc) {
     this.color = "#FF5000";
+    this.src = imageSrc;
     Entity.call(this,posX,posY,width,height);
 
-    this.tick = function() {
+    this.tick = function(Entities) {
         this.posY += this.speedY;
         this.posX += this.speedX;
-        if(this.posY>=Game.windowHeight) {
+        if(this.posY<0) {
             this.deleted = true;
+            Entities.splice(Entities.indexOf(this),1);
         }
     }
 
