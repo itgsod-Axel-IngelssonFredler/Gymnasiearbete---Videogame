@@ -38,8 +38,8 @@ function StartGameLoop() {      //This function starts the primary loop for our 
             var image = new Image()
 
 
-            context.fillStyle = EntityList[i].color;
-            context.fillRect(EntityList[i].posX,EntityList[i].posY, EntityList[i].width,EntityList[i].height);
+            context.strokeStyle = EntityList[i].color;
+            context.strokeRect(EntityList[i].posX,EntityList[i].posY, EntityList[i].width,EntityList[i].height);
             
             if(EntityList[i].src != undefined) {
                  image.src = EntityList[i].src;
