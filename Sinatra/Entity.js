@@ -13,10 +13,12 @@ function Entity(posX, posY, width, height){
     this.speedX = 0;
     this.speedY = 0;
     this.deleted = false;
-
-    this.tick = function() {
+    this.id = "Default";
+    this.tick = function(Entities) {
         this.posX += this.speedX*Tickspeed;
         this.posY += this.speedY*Tickspeed;
+        console.log(this.deleted);
+
     }
 }
 
@@ -31,7 +33,7 @@ function Player(posX,posY,width,height) {
     var accuracy = 0.8;
     var particleWidth = 0;
     var particleHeight = 0;
-     
+    this.id = "Player";
         this.fire = function(Entities) {
             with(this) {
             
@@ -90,13 +92,16 @@ function Enemy(posX,posY,width,height) {
     this.speedX = 3;
     this.speedY = 0;
     this.testVariable = 0;
-    
+    this.id = "Enemy";
 
-    this.tick = function() {
+    this.tick = function(Entities) {
         with(this) {
         posX += speedX;
         posY += speedY;
-
+        if(this.deleted==true) {
+            console.log("This object is gone");
+            Entities.splice(Entities.indexOf(this),1);
+        }
         if(posX+width>=800||posX<=0) {
             speedX*=-1;
         }
@@ -109,21 +114,33 @@ function Particle(posX,posY,width,height,imageSrc) {
     this.color = "#FF5000";
     this.src = imageSrc;
     Entity.call(this,posX,posY,width,height);
+    this.collisionCheck = function(object) {
+        if (this.posX + this.width > object.posX && object.posX + object.width > this.posX &&
+            this.posY + this.height > object.posY && object.posY + object.height > this.posY){
+            console.log("Collision!");
+            object.deleted = true;
+            //object.color = "#FFFF00";
+            console.log(object.deleted);
+        }
 
+            };
     this.tick = function(Entities) {
         this.posY += this.speedY;
         this.posX += this.speedX;
+        for(var i = 0; i < Entities.length;i++) {
+            if(Entities[i]!=this) {
+                this.collisionCheck(Entities[i]);
+            }
+        }
         if(this.posY<0) {
             this.deleted = true;
-            Entities.splice(Entities.indexOf(this),1);
+
         }
     }
 
 }
 
-function CollisionCheck() {
 
-}
 
 
 exports.Entity = Entity;
