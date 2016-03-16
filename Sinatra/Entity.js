@@ -120,6 +120,9 @@ function Particle(posX,posY,width,height) {
 
 }
 
+function CollisionCheck() {
+
+}
 
 
 exports.Entity = Entity;
