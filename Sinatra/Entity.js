@@ -101,7 +101,6 @@ function Enemy(posX,posY,width,height) {
         posX += speedX;
         posY += speedY;
         if(this.deleted==true) {
-            console.log("This object is gone");
             Entities.splice(Entities.indexOf(this),1);
         }
         if(posX+width>=800||posX<=0) {
