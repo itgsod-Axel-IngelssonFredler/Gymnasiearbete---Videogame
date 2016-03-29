@@ -3,20 +3,24 @@
  */
 WebsocketServer = require("ws").Server;		/** This adds the "ws" module to this file
                                            and uses the "Server" part of it. **/
+updateDelay = 1;
+tickspeed = 16.67;
+EventListener = require("events");
 
-updateDelay = 50;
+windowWidth = 800;
+windowHeight = 550;
+
 Entity = require('./Entity').Entity;
 Player = require('./Entity').Player;
 Enemy = require('./Entity').Enemy;
-Particle = require('./Entity').Particle
+Particle = require('./Entity').Particle;
 
 KeyInput = require('./KeyInput').KeyInput;
 Basic_HUD = require('./HUD').Basic_HUD;
 Lifebar = require('./HUD').Lifebar;
 Extralives = require('./HUD').Extralives;
 Score = require('./HUD').Score;
-windowWidth = 800;
-windowHeight = 550;
+
 
 
 wss = new WebsocketServer({port:4040});		//Here we create a new object from the previously obtained websocket server
@@ -42,7 +46,7 @@ wss.on("connection", function(ws) { /**
 	Entities.push(lifebar_background);
 	Entities.push(lifebar);**/
 	console.log("A client has connected. IP: "+ws.IP);
-	Game.tickspeed = 16.67;
+
 	var game = new Game();
 	var lastMessage = 0;
 	var Entities = game.Entities;
@@ -82,9 +86,6 @@ wss.on("connection", function(ws) { /**
     												 can be accomplished with a simple "for"-loop. Because of this
     												 **/
     		Entities[i].tick(Entities,game.keyinput);
-			if(Entities[i].deleted==true) {
-				Entities.slice(i,1);
-			}
     	}
 
     	
@@ -127,8 +128,8 @@ wss.on("connection", function(ws) { /**
     });
 
 
-    
-    var interval = setInterval(function() {tick()}, Game.tickspeed);
+
+    var interval = setInterval(function() {tick()}, tickspeed);
     var sendUpdateInterval = setInterval(function() {sendUpdate()}, updateDelay);
     ws.on("close", function() {
     	clearInterval(interval);
@@ -147,16 +148,16 @@ function Game() {
 	this.currentTime = 0;
 	var player1 = new Player(400,400,30,40);
 	var enemy1 = new Enemy(400,50,30,40);
-	var lifebar_background = new Entity(300,500,200,20);
-	lifebar_background.color = "blue";
-	var lifebar = new Lifebar(300,500,100,150,20,"yellow",lifebar_background);
+	//var lifebar_background = new Entity(300,500,200,20);
+	//lifebar_background.color = "blue";
+	//var lifebar = new Lifebar(300,500,100,150,20,"yellow",lifebar_background);
 	player1.speed = 5;
 	this.keyinput = new KeyInput();
 	with(this) {
 	Entities.push(player1);
 	Entities.push(enemy1);
-	Entities.push(lifebar_background);
-	Entities.push(lifebar);	
+	//Entities.push(lifebar_background);
+	//Entities.push(lifebar);	
 	}
 	
 }
@@ -206,3 +207,6 @@ function setKey(game,message) {
 		}
 	}
 }
+
+exports.Game = Game;
+console.log(exports)

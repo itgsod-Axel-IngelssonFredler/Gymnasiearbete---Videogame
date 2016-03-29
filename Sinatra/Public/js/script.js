@@ -2,7 +2,7 @@
 
 function run() {    //This is function that runs when the "onload" 
                     //event on the body of the site is called
-    socket = new WebSocket("ws://83.250.142.252:4040/"); //Here we create a "WebSocket" object using the built-in "WebSocket"
+    socket = new WebSocket("ws://localhost:4040/"); //Here we create a "WebSocket" object using the built-in "WebSocket"
     socket.onopen = function() { //This function is attached to the "onopen" event of the socket, 
                                  //meaning that it will run as soon
                                  //as the socket is open and ready to be used. 
@@ -35,12 +35,21 @@ function StartGameLoop() {      //This function starts the primary loop for our 
         var hud_element = document.createElement("img");
         hud_element.src = "img/HUD_Basic_2.png";
         for(var i = 0; i < EntityList.length; i++) {
+            var image = new Image()
+
+
+            context.strokeStyle = EntityList[i].color;
+            context.strokeRect(EntityList[i].posX,EntityList[i].posY, EntityList[i].width,EntityList[i].height);
             
-            context.fillStyle = EntityList[i].color;
-            context.fillRect(EntityList[i].posX,EntityList[i].posY, EntityList[i].width,EntityList[i].height);
+            if(EntityList[i].src != undefined) {
+                 image.src = EntityList[i].src;
+                 context.drawImage(image,EntityList[i].posX,EntityList[i].posY);
+            }
+           
+
+            //context.fillRect(0,0,50,50)
             EntityList[i].posX += EntityList[i].speedX;
             EntityList[i].posY += EntityList[i].speedY;
-            //context.fillRect(0,0,50,50)
         }
 
         context.drawImage(hud_element,0,0);
