@@ -9,10 +9,6 @@ function Lifebar(x,y,maxhealth,width,height,color,background) {
 	this.speedX = 0;
 	this.speedY = 0;
 	this.color = color;
-	with(this) {
-		setInterval(function(){currentHealth-=30;currentHealth = clamp(currentHealth,0,maxhealth)},2000);
-	}
-	
 	this.clamp = function(value, min, max) {
 		if(value<min) {
 			return 0;
@@ -24,7 +20,6 @@ function Lifebar(x,y,maxhealth,width,height,color,background) {
 			return value;
 		}
 	}
-
 	this.tick = function(keyinput) {
 		with(this) {
 			width = currentHealth/maxhealth*background.width;

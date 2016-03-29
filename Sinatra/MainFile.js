@@ -156,8 +156,8 @@ function Game() {
 	with(this) {
 	Entities.push(player1);
 	Entities.push(enemy1);
-	//Entities.push(lifebar_background);
-	//Entities.push(lifebar);	
+	Entities.push(lifebar_background);
+	Entities.push(lifebar);
 	}
 	
 }
