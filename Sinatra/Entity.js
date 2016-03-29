@@ -27,12 +27,12 @@ function Player(posX,posY,width,height) {
     this.color = "green";
     this.firerate = 6;
     this.projectileSpeed = -10;
+    this.points = 0;
     var fireCooldown = 0;
     var shotsPerFire = 1;
     var accuracy = 0.8;
     var particleWidth = 16;
     var particleHeight = 32;
-
     this.id = "Player";
         this.fire = function(Entities) {
             with(this) {
@@ -125,6 +125,8 @@ function Particle(posX,posY,width,height,imageSrc) {
             console.log("Collision!");
             this.deleted = true;
             object.health -= 50;
+            Player.points += 5;
+            console.log(Player.points);
         }
 
             };

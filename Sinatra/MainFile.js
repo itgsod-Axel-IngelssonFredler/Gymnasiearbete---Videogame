@@ -3,11 +3,9 @@
  */
 WebsocketServer = require("ws").Server;		/** This adds the "ws" module to this file
                                            and uses the "Server" part of it. **/
-
 updateDelay = 1;
 tickspeed = 16.67;
 EventListener = require("events");
-
 
 windowWidth = 800;
 windowHeight = 550;
@@ -116,13 +114,15 @@ wss.on("connection", function(ws) { /**
     									released.
     									**/
 
+    	
     	if(msg=="Received data!") {
     		var date = new Date().getTime();
     		console.log("Delay: "+(date-lastMessage))
     		lastMessage = (date);
     	}
     	else {
-    		setKey(game,msg);	
+    		setKey(game,msg);
+    		sendUpdate();	
     	}
     	
     });
@@ -156,8 +156,8 @@ function Game() {
 	with(this) {
 	Entities.push(player1);
 	Entities.push(enemy1);
-	Entities.push(lifebar_background);
-	Entities.push(lifebar);
+	//Entities.push(lifebar_background);
+	//Entities.push(lifebar);
 	}
 	
 }
