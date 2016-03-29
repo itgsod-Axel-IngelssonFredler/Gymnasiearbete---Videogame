@@ -1,4 +1,5 @@
 Game = require('./MainFile');
+Weapon = require('./Weapon').Weapon;
 Tickspeed = tickspeed;
 
 console.log(Tickspeed);
@@ -27,19 +28,22 @@ function Player(posX,posY,width,height) {
     this.color = "green";
     this.firerate = 6;
     this.projectileSpeed = -10;
-    var fireCooldown = 0;
-    var shotsPerFire = 1;
-    var accuracy = 0.8;
-    var particleWidth = 16;
-    var particleHeight = 32;
+    this.inventory = [new Weapon("img/Bullet_Trace.png",50,-10)];
+    this.currentWeapon = this.inventory[0];
+    console.log(this.currentWeapon);
+    this.fireCooldown = 0;
 
     this.id = "Player";
         this.fire = function(Entities) {
             with(this) {
-            
-            for(var i = 0; i < shotsPerFire; i++) {
-                var particle = new Particle(posX+width/2-particleWidth/2,posY-particleHeight,particleWidth,particleHeight,"img/Bullet_Trace.png");
-                particle.speedY = this.projectileSpeed;
+            console.log("FIRE");
+            for(var i = 0; i < this.currentWeapon.shotsPerFire; i++) {
+
+                with(currentWeapon) {
+                     var particle = new Particle(posX+width/2-particleWidth/2,posY-particleHeight,particleWidth,particleHeight,sprite);
+                }
+               
+                particle.speedY = this.currentWeapon.speed;
                 particle.id = "friendly";
                 //particle.speedX = (Math.random()*(5+5)-5)*(1-accuracy);
                 Entities.push(particle);
@@ -49,7 +53,7 @@ function Player(posX,posY,width,height) {
 
 
        this.tick = function(Entities,keyinput) {
-        fireCooldown -= 16.67;
+        this.fireCooldown -= 16.67;
 
         if(keyinput.KEY_LEFT==1) {
             this.speedX = -this.speed;
@@ -71,10 +75,10 @@ function Player(posX,posY,width,height) {
             this.speedY = 0;
         }
 
-        if(keyinput.KEY_SPACE==1&&fireCooldown<=0) {
+        if(keyinput.KEY_SPACE==1&&this.fireCooldown<=0) {
             with(this) {
                fire(Entities);
-               fireCooldown = 1000/firerate;
+               fireCooldown = 1000/currentWeapon.firerate;
             }
             
         }
