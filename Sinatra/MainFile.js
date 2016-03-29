@@ -4,7 +4,7 @@
 WebsocketServer = require("ws").Server;		/** This adds the "ws" module to this file
                                            and uses the "Server" part of it. **/
 
-updateDelay = 30;
+updateDelay = 50;
 Entity = require('./Entity').Entity;
 Player = require('./Entity').Player;
 Enemy = require('./Entity').Enemy;
@@ -113,13 +113,15 @@ wss.on("connection", function(ws) { /**
     									released.
     									**/
 
+    	
     	if(msg=="Received data!") {
     		var date = new Date().getTime();
     		console.log("Delay: "+(date-lastMessage))
     		lastMessage = (date);
     	}
     	else {
-    		setKey(game,msg);	
+    		setKey(game,msg);
+    		sendUpdate();	
     	}
     	
     });
