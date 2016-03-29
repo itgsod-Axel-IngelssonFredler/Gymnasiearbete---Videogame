@@ -26,8 +26,6 @@ function Entity(posX, posY, width, height){
 function Player(posX,posY,width,height) {
     Entity.call(this,posX,posY,width,height);
     this.color = "green";
-    this.firerate = 6;
-    this.projectileSpeed = -10;
     this.inventory = [new Weapon("img/Bullet_Trace.png",50,-10)];
     this.currentWeapon = this.inventory[0];
     console.log(this.currentWeapon);
