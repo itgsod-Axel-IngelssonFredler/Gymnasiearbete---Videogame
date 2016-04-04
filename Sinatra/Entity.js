@@ -4,17 +4,17 @@ Tickspeed = tickspeed;
 
 console.log(Tickspeed);
 
-function Entity(posX, posY, width, height){
-    this.posX = posX;
-    this.posY = posY;
-    this.width = width;
-    this.height = height;
-    this.speed = 0;
-    this.speedX = 0;
-    this.speedY = 0;
-    this.deleted = false;
-    this.id = "Default";
-    this.tick = function(Entities) {
+function Entity(posX, posY, width, height){ //This Entity function defines the entities we display in the game
+    this.posX = posX; //The Entity's position on the X axis
+    this.posY = posY; //The Entity's position on the Y axis
+    this.width = width; //The width of the Entity
+    this.height = height; //The height of the Entity
+    this.speed = 0; //The speed of the Entity
+    this.speedX = 0; //The speed of the Entity on the X axis
+    this.speedY = 0; //The speed of the Entity on the Y axis
+    this.deleted = false; //Displays the state of the Entity(Deleted/Not Deleted)
+    this.id = "Default"; //The ID of the Entity
+    this.tick = function(Entities) { //This Function updates the Entity for every "tick"
         this.posX += this.speedX*Tickspeed;
         this.posY += this.speedY*Tickspeed;
         console.log(this.deleted);
