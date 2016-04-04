@@ -1,6 +1,4 @@
 function Weapon(sprite, firerate, speed) {
-
-}
 	this.sprite = sprite;
 	this.firerate = firerate;
 	this.speed = speed;

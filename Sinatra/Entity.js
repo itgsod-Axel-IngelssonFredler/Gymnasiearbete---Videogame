@@ -36,18 +36,14 @@ function Player(posX,posY,width,height) {
     var particleHeight = 32;
     this.inventory = [new Weapon("img/Bullet_Trace.png",50,-10)];
     this.currentWeapon = this.inventory[0];
-    console.log(this.currentWeapon);
     this.fireCooldown = 0;
 
     this.id = "Player";
         this.fire = function(Entities) {
             with(this) {
-            console.log("FIRE");
             for(var i = 0; i < this.currentWeapon.shotsPerFire; i++) {
 
-                with(currentWeapon) {
-                     var particle = new Particle(posX+width/2-particleWidth/2,posY-particleHeight,particleWidth,particleHeight,sprite);
-                }
+                var particle = new Particle(currentweapon.posX+currentwaepon.width/2-currentweapon.particleWidth/2,currentweapon.posY-currentweapon.particleHeight,currentweapon.particleWidth,currentweapon.particleHeight,currentweapon.sprite);
                
                 particle.speedY = this.currentWeapon.speed;
                 particle.id = "friendly";
