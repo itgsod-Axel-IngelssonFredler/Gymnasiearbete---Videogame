@@ -23,31 +23,26 @@ function Entity(posX, posY, width, height){ //This Entity function defines the e
 }
 
 
-function Player(posX,posY,width,height) {
-    Entity.call(this,posX,posY,width,height);
+function Player(posX,posY,width,height) { //This Player function defines the player object we display in the game
+    Entity.call(this,posX,posY,width,height); //This sets the Player function to the Entity template
     this.color = "green";
     this.firerate = 6;
-    this.projectileSpeed = -10;
-    this.points = 0;
-    var fireCooldown = 0;
-    var shotsPerFire = 1;
-    var accuracy = 0.8;
+    this.projectileSpeed = -10; //The speed of the projectiles
+    this.points = 0; //Initializes the points variable
+    var shotsPerFire = 1; //How many shots are launched per "click"
+    var accuracy = 0.8; //How accurate the shots are
     var particleWidth = 16;
     var particleHeight = 32;
-    this.inventory = [new Weapon("img/Bullet_Trace.png",50,-10)];
-    this.currentWeapon = this.inventory[0];
-    console.log(this.currentWeapon);
-    this.fireCooldown = 0;
+    this.inventory = [new Weapon("img/Bullet_Trace.png",50,-10)]; //Defines what weapons the inventory contains
+    this.currentWeapon = this.inventory[0]; //Defines which weapon is being used at the current time
+    this.fireCooldown = 0; //
 
-    this.id = "Player";
-        this.fire = function(Entities) {
+    this.id = "Player"; //Defines the id attached to the player object
+        this.fire = function(Entities) { //
             with(this) {
-            console.log("FIRE");
             for(var i = 0; i < this.currentWeapon.shotsPerFire; i++) {
 
-                with(currentWeapon) {
-                     var particle = new Particle(posX+width/2-particleWidth/2,posY-particleHeight,particleWidth,particleHeight,sprite);
-                }
+                var particle = new Particle(currentweapon.posX+currentwaepon.width/2-currentweapon.particleWidth/2,currentweapon.posY-currentweapon.particleHeight,currentweapon.particleWidth,currentweapon.particleHeight,currentweapon.sprite);
                
                 particle.speedY = this.currentWeapon.speed;
                 particle.id = "friendly";
