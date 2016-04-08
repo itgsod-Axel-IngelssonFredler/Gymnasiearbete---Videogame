@@ -115,16 +115,8 @@ wss.on("connection", function(ws) { /**
     									**/
 
     	
-    	if(msg=="Received data!") {
-    		var date = new Date().getTime();
-    		console.log("Delay: "+(date-lastMessage))
-    		lastMessage = (date);
-    	}
-    	else {
     		setKey(game,msg);
-    		sendUpdate();	
-    	}
-    	
+    		sendUpdate();
     });
 
 

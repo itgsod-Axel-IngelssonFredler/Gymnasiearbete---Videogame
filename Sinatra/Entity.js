@@ -27,30 +27,28 @@ function Player(posX,posY,width,height) {
     Entity.call(this,posX,posY,width,height);
     this.color = "green";
     this.firerate = 6;
-    this.projectileSpeed = -10;
+    this.id = "player";
     this.points = 0;
     var fireCooldown = 0;
     var shotsPerFire = 1;
     var accuracy = 0.8;
     var particleWidth = 16;
     var particleHeight = 32;
-    this.inventory = [new Weapon("img/Bullet_Trace.png",50,-10)];
+    this.inventory = [new Weapon("img/Bullet_Trace.png",10,-2,0.35)];
     this.currentWeapon = this.inventory[0];
     this.fireCooldown = 0;
 
     this.id = "Player";
         this.fire = function(Entities) {
-            with(this) {
-            for(var i = 0; i < this.currentWeapon.shotsPerFire; i++) {
-
-                var particle = new Particle(currentweapon.posX+currentwaepon.width/2-currentweapon.particleWidth/2,currentweapon.posY-currentweapon.particleHeight,currentweapon.particleWidth,currentweapon.particleHeight,currentweapon.sprite);
-               
+                with(this.currentWeapon) {
+                      var particle = new Particle(this.posX+this.width/2-particleWidth/2,this.posY-particleHeight,particleWidth,particleHeight,sprite,this);
+                }
+              
+                particle.damage = this.currentWeapon.damage;
                 particle.speedY = this.currentWeapon.speed;
-                particle.id = "friendly";
+                particle.id = this.id;
                 //particle.speedX = (Math.random()*(5+5)-5)*(1-accuracy);
                 Entities.push(particle);
-            }
-            }
         }    
 
 
@@ -99,9 +97,16 @@ function Enemy(posX,posY,width,height) {
     this.speedX = 3;
     this.speedY = 0;
     this.testVariable = 0;
-    this.id = "Enemy";
+    this.id = "enemy";
     this.health = 100;
+    this.fireCooldown = 0;
+
     this.tick = function(Entities) {
+        this.fireCooldown-=16.67;
+        if(this.fireCooldown<=0) {
+            this.fire(Entities);
+            this.fireCooldown=1000;
+        }
         if (this.health <= 0) {
             this.deleted = true;
         }
@@ -117,21 +122,31 @@ function Enemy(posX,posY,width,height) {
         }
     }
 
+    this.fire = function(Entities) {
+        var particle = new Particle("img/Basic_Rocket.png",this.posX+this.width/2, this.posY+this.height,16,32);
+        particle.id=this.id;
+        particle.rotation = 180;
+        Entities.push(particle);
+    }
+
 }
 
-function Particle(posX,posY,width,height,imageSrc) {
+function Particle(posX,posY,width,height,imageSrc,shooter) {
     this.color = "#FF5000";
     this.src = imageSrc;
     this.width = width;
     this.height = height;
+    this.damage = 0;
+    this.shooter = shooter;
     Entity.call(this,posX,posY,width,height);
+    this.rotation = 0;
     this.collisionCheck = function(object) {
         if (this.posX + this.width > object.posX && object.posX + object.width > this.posX &&
-            this.posY + this.height > object.posY && object.posY + object.height > this.posY&&(object.id!="friendly"&&object.id!="Player")){
+            this.posY + this.height > object.posY && object.posY + object.height > this.posY&&(object.id!=this.id&&(object.class!=Player||object.class!=Enemy))){
             console.log("Collision!");
             this.deleted = true;
-            object.health -= 50;
-            Player.points += 5;
+            object.health -= this.damage;
+            this.shooter.points += 250
             console.log(Player.points);
         }
 
