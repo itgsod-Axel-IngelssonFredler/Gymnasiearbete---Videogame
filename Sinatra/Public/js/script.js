@@ -41,10 +41,23 @@ function StartGameLoop() {      //This function starts the primary loop for our 
             context.strokeStyle = EntityList[i].color;
             context.strokeRect(EntityList[i].posX,EntityList[i].posY, EntityList[i].width,EntityList[i].height);
             
+            context.fillStyle = "#00FF00";
+            context.font="20px Arial";
+
+            context.fillText(EntityList[0].points,30,30);
+            context.save();
+
             if(EntityList[i].src != undefined) {
-                 image.src = EntityList[i].src;
-                 context.drawImage(image,EntityList[i].posX,EntityList[i].posY);
+                image.src = EntityList[i].src;
+                if(EntityList[i].rotation!=undefined) {
+                    context.translate(EntityList[i].posX, EntityList[i].posY);
+                    context.rotate(EntityList[i].rotation*Math.PI/180);
+                }
+                context.drawImage(image,EntityList[i].posX,EntityList[i].posY);
+                context.restore();
+
             }
+
            
 
             //context.fillRect(0,0,50,50)

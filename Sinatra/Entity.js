@@ -39,18 +39,18 @@ function Player(posX,posY,width,height) { //This Player function defines the pla
 
     this.id = "Player"; //Defines the id attached to the player object
         this.fire = function(Entities) { //
-            with(this) {
-            for(var i = 0; i < this.currentWeapon.shotsPerFire; i++) {
+            with (this) {
+                for (var i = 0; i < this.currentWeapon.shotsPerFire; i++) {
 
-                var particle = new Particle(currentweapon.posX+currentwaepon.width/2-currentweapon.particleWidth/2,currentweapon.posY-currentweapon.particleHeight,currentweapon.particleWidth,currentweapon.particleHeight,currentweapon.sprite);
-               
-                particle.speedY = this.currentWeapon.speed;
-                particle.id = "friendly";
-                //particle.speedX = (Math.random()*(5+5)-5)*(1-accuracy);
-                Entities.push(particle);
+                    var particle = new Particle(currentweapon.posX + currentwaepon.width / 2 - currentweapon.particleWidth / 2, currentweapon.posY - currentweapon.particleHeight, currentweapon.particleWidth, currentweapon.particleHeight, currentweapon.sprite);
+
+                    particle.speedY = this.currentWeapon.speed;
+                    particle.id = this.id;
+                    //particle.speedX = (Math.random()*(5+5)-5)*(1-accuracy);
+                    Entities.push(particle);
+                }
             }
-            }
-        }    
+        }
 
 
        this.tick = function(Entities,keyinput) {
@@ -98,9 +98,16 @@ function Enemy(posX,posY,width,height) {
     this.speedX = 3;
     this.speedY = 0;
     this.testVariable = 0;
-    this.id = "Enemy";
+    this.id = "enemy";
     this.health = 100;
+    this.fireCooldown = 0;
+
     this.tick = function(Entities) {
+        this.fireCooldown-=16.67;
+        if(this.fireCooldown<=0) {
+            this.fire(Entities);
+            this.fireCooldown=1000;
+        }
         if (this.health <= 0) {
             this.deleted = true;
         }
@@ -116,21 +123,31 @@ function Enemy(posX,posY,width,height) {
         }
     }
 
+    this.fire = function(Entities) {
+        var particle = new Particle("img/Basic_Rocket.png",this.posX+this.width/2, this.posY+this.height,16,32);
+        particle.id=this.id;
+        particle.rotation = 180;
+        Entities.push(particle);
+    }
+
 }
 
-function Particle(posX,posY,width,height,imageSrc) {
+function Particle(posX,posY,width,height,imageSrc,shooter) {
     this.color = "#FF5000";
     this.src = imageSrc;
     this.width = width;
     this.height = height;
+    this.damage = 0;
+    this.shooter = shooter;
     Entity.call(this,posX,posY,width,height);
+    this.rotation = 0;
     this.collisionCheck = function(object) {
         if (this.posX + this.width > object.posX && object.posX + object.width > this.posX &&
-            this.posY + this.height > object.posY && object.posY + object.height > this.posY&&(object.id!="friendly"&&object.id!="Player")){
+            this.posY + this.height > object.posY && object.posY + object.height > this.posY&&(object.id!=this.id&&(object.class!=Player||object.class!=Enemy))){
             console.log("Collision!");
             this.deleted = true;
-            object.health -= 50;
-            Player.points += 5;
+            object.health -= this.damage;
+            this.shooter.points += 250;
             console.log(Player.points);
         }
 
