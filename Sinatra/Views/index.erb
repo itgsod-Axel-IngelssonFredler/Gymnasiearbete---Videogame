@@ -6,19 +6,34 @@
       <link rel="stylesheet" href="css/style.css" type="text/css">
     </head>
     <body onload="run();">
-        <div id="main_button_bar">
-            <a href="https://translate.google.se/" class="button">Test Button1</a>
-            <a href="https://translate.google.se/" class="button">Test Button2</a>
-            <a href="https://translate.google.se/" class="button">Test Button3</a>
-            <a href="https://translate.google.se/" class="button">Test Button4</a>
-            <a href="https://translate.google.se/" class="button">Test Button5</a>
+        <div id="logo"></div>
+        <div id="login_container">
+          <form action="">
+            <div class="login_input">
+              <input type="text" name="user_name" placeholder="Username">
+            </div><br>
+            <div class="login_input">
+                <input type="text" name="password" placeholder="Password">
+            </div><br>
+            <div id="submit_button">
+              <input type="button" value="Log in!">
+            </div>
+          </form>
         </div>
-    	<div id="canvasDiv">
-    	<canvas id="canvas" width="800" height="550" tabindex="1">
-          <div id="health_bar_div">
-            <div id="health_bar"></div>
+        <div id="main_container">
+          <div id="button_bar">
+            <div class="button">Test</div>
+            <div class="button">Test</div>
+            <div class="button">Test</div>
+            <div class="button">Test</div>
           </div>
-        </canvas>
-    	</div>
+            <div id="canvasDiv">
+                <canvas id="canvas" width="800" height="550" tabindex="1">
+                <div id="health_bar_div">
+                    <div id="health_bar"></div>
+                </div>
+                </canvas>
+            </div>
+        </div>
     </body>
 </html>
