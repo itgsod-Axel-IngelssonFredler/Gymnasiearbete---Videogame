@@ -45,16 +45,10 @@ function StartGameLoop() {      //This function starts the primary loop for our 
             context.font="20px Arial";
 
             context.fillText(EntityList[0].points,30,30);
-            context.save();
 
             if(EntityList[i].src != undefined) {
                 image.src = EntityList[i].src;
-                if(EntityList[i].rotation!=undefined) {
-                    context.translate(EntityList[i].posX, EntityList[i].posY);
-                    context.rotate(EntityList[i].rotation*Math.PI/180);
-                }
                 context.drawImage(image,EntityList[i].posX,EntityList[i].posY);
-                context.restore();
 
             }
 

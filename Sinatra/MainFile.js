@@ -46,10 +46,14 @@ wss.on("connection", function(ws) { /**
 	Entities.push(lifebar_background);
 	Entities.push(lifebar);**/
 	console.log("A client has connected. IP: "+ws.IP);
+	newGame();
+	var game;
+	var Entities;
 
-	var game = new Game();
-	var lastMessage = 0;
-	var Entities = game.Entities;
+	function newGame() {
+		game = new Game();
+		Entities = game.Entities;
+	}
 
     function tick() {				/**
     								This function "tick()" can be summarized as the heartbeat of the game. This is the loop 
@@ -121,7 +125,7 @@ wss.on("connection", function(ws) { /**
 
 
 
-    var interval = setInterval(function() {tick()}, tickspeed);
+    var interval = setInterval(function() {if(Entities[0].dead!=true) {tick()} else {newGame();}}, tickspeed);
     var sendUpdateInterval = setInterval(function() {sendUpdate()}, updateDelay);
     ws.on("close", function() {
     	clearInterval(interval);
@@ -130,7 +134,6 @@ wss.on("connection", function(ws) { /**
 
 
 });
-
 
 function Game() {
 	this.Entities = []; 				//This is the container for ALL objects in the game. We simply initialize it as an empty array.
