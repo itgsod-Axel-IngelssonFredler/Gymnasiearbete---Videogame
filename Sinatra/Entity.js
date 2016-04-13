@@ -1,7 +1,7 @@
 Game = require('./MainFile');
 Weapon = require('./Weapon').Weapon;
 Tickspeed = tickspeed;
-
+moveMult = Tickspeed/16.67;
 console.log(Tickspeed);
 
 function Entity(posX, posY, width, height){ //This Entity function defines the entities we display in the game
@@ -15,34 +15,27 @@ function Entity(posX, posY, width, height){ //This Entity function defines the e
     this.deleted = false; //Displays the state of the Entity(Deleted/Not Deleted)
     this.id = "Default"; //The ID of the Entity
     this.tick = function(Entities) { //This Function updates the Entity for every "tick"
-        this.posX += this.speedX*Tickspeed;
-        this.posY += this.speedY*Tickspeed;
+        this.posX += this.speedX*moveMult;
+        this.posY += this.speedY*moveMult;
 
     }
 }
 
 
+
 function Player(posX,posY,width,height) { //This Player function defines the player object we display in the game
     Entity.call(this,posX,posY,width,height); //This sets the Player function to the Entity template
-    this.color = "green";
-    this.firerate = 6;
-    this.projectileSpeed = -10; //The speed of the projectiles
-     //Initializes the points variable
-    var shotsPerFire = 1; //How many shots are launched per "click"
-    var accuracy = 0.8; //How accurate the shots are
-    var particleWidth = 16;
-    var particleHeight = 32;
+    this.color = "#0F0";
     this.points = 0;
+
     this.health = 100;
     this.dead = false;
-    this.inventory = [new Weapon("img/Bullet_Trace.png",5,-10)]; //Defines what weapons the inventory contains
+    this.inventory = [new Weapon("img/Bullet_Trace.png",200,-10,50)]; //Defines what weapons the inventory contains
     this.currentWeapon = this.inventory[0]; //Defines which weapon is being used at the current time
     this.fireCooldown = 0; //
 
     this.id = "Player"; //Defines the id attached to the player object
         this.fire = function(Entities) { //
-
-            
             with (this) {
                 for (var i = 0; i < this.currentWeapon.shotsperfire; i++) {
                     with(currentWeapon) {
@@ -61,12 +54,10 @@ function Player(posX,posY,width,height) { //This Player function defines the pla
 
        this.tick = function(Entities,keyinput) {
         if(this.health<=0) {
-                Player.dead = true;
+                this.dead = true;
         }
-
-        this.points = Player.points;
         if(this.fireCooldown>=0) {
-            this.fireCooldown -= 16.67;
+            this.fireCooldown -= Tickspeed;
         }
         
 
@@ -100,8 +91,8 @@ function Player(posX,posY,width,height) { //This Player function defines the pla
         else {
         }
 
-        this.posX += this.speedX;
-        this.posY += this.speedY;
+        this.posX += this.speedX*moveMult;
+        this.posY += this.speedY*moveMult;
     }
 
 }
@@ -110,17 +101,16 @@ function Player(posX,posY,width,height) { //This Player function defines the pla
 function Enemy(posX,posY,width,height) {
     Entity.call(this,posX,posY,width,height);
     this.color = "red";
-    this.speedX = 3;
+    this.speedX = 10;
     this.speedY = 0;
     this.testVariable = 0;
-    this.id = "enemy";
+    this.id = "Enemy";
     this.health = 100;
-    this.currentWeapon = new Weapon("img/Basic_Rocket", 5, 10, 10);
+    this.currentWeapon = new Weapon("img/Basic_Rocket", 200, 10, 50);
     this.fireCooldown = 0;
 
     this.tick = function(Entities) {
-
-        this.fireCooldown-=16.67;
+        this.fireCooldown-=Tickspeed;
         if(this.fireCooldown<=0) {
             this.fire(Entities);
             this.fireCooldown=1000/this.currentWeapon.firerate;
@@ -129,8 +119,8 @@ function Enemy(posX,posY,width,height) {
             this.deleted = true;
         }
         with(this) {
-        posX += speedX;
-        posY += speedY;
+        posX += speedX*moveMult;
+        posY += speedY*moveMult;
         if(this.deleted==true) {
             Entities.splice(Entities.indexOf(this),1);
         }
@@ -160,20 +150,20 @@ function Particle(posX,posY,width,height,imageSrc,shooter) {
     this.rotation = 0;
     this.collisionCheck = function(object) {
         if (this.posX + this.width > object.posX && object.posX + object.width > this.posX &&
-            this.posY + this.height > object.posY && object.posY + object.height > this.posY&&(object.id!=this.id&&(object.class!=Player||object.class!=Enemy))){
+            this.posY + this.height > object.posY && object.posY + object.height > this.posY&&(object.id!=this.id)){
             this.deleted = true;
             object.health -= this.shooter.currentWeapon.damage;
             
-            if(shooter.constructor==Player) {
-                shooter.points += 50;
+            if(shooter.id=="Player") {
+                this.shooter.points += 50;
             }
             
         }
 
-            };
+    };
     this.tick = function(Entities) {
-        this.posY += this.speedY;
-        this.posX += this.speedX;
+        this.posY += this.speedY*moveMult;
+        this.posX += this.speedX*moveMult;
         for(var i = 0; i < Entities.length;i++) {
             if(Entities[i]!=this) {
                 this.collisionCheck(Entities[i]);
