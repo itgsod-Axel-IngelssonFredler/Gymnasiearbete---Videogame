@@ -1,8 +1,8 @@
-function Lifebar(x,y,maxhealth,width,height,color,background) {
+function Lifebar(x,y,width,height,color,object,background) {
 	this.posX = x;
 	this.posY = y;
-	this.maxhealth = maxhealth;
-	this.currentHealth = maxhealth;
+	this.parent = object;
+	this.maxhealth = this.parent.health;
 	this.background = background;
 	this.width = width;
 	this.height = height;
@@ -19,11 +19,10 @@ function Lifebar(x,y,maxhealth,width,height,color,background) {
 		else {
 			return value;
 		}
-	}
+	};
 	this.tick = function(keyinput) {
-		with(this) {
-			width = currentHealth/maxhealth*background.width;
-		}
+		this.currentHealth = this.parent.health;
+		this.width = this.currentHealth/this.maxhealth*this.background.width;
 	}
 }
 

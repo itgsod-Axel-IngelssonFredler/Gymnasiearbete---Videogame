@@ -35,12 +35,16 @@ function StartGameLoop() {      //This function starts the primary loop for our 
         var hud_element = document.createElement("img");
         hud_element.src = "img/HUD_Basic_2.png";
         for(var i = 0; i < EntityList.length; i++) {
-            var image = new Image()
+            var image = new Image();
 
-
-            context.strokeStyle = EntityList[i].color;
-            context.strokeRect(EntityList[i].posX,EntityList[i].posY, EntityList[i].width,EntityList[i].height);
-            
+            if(EntityList[i].src==undefined) {
+                context.fillStyle = EntityList[i].color;
+                context.fillRect(EntityList[i].posX,EntityList[i].posY, EntityList[i].width,EntityList[i].height);
+            }
+            else {
+                context.strokeStyle = EntityList[i].color;
+                context.strokeRect(EntityList[i].posX,EntityList[i].posY, EntityList[i].width,EntityList[i].height);
+            }
             context.fillStyle = "#00FF00";
             context.font="20px Arial";
 
