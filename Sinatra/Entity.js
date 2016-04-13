@@ -17,7 +17,6 @@ function Entity(posX, posY, width, height){ //This Entity function defines the e
     this.tick = function(Entities) { //This Function updates the Entity for every "tick"
         this.posX += this.speedX*Tickspeed;
         this.posY += this.speedY*Tickspeed;
-        console.log(this.deleted);
 
     }
 }
@@ -27,22 +26,29 @@ function Player(posX,posY,width,height) { //This Player function defines the pla
     this.color = "green";
     this.firerate = 6;
     this.projectileSpeed = -10; //The speed of the projectiles
-    this.points = 0; //Initializes the points variable
+     //Initializes the points variable
     var shotsPerFire = 1; //How many shots are launched per "click"
     var accuracy = 0.8; //How accurate the shots are
     var particleWidth = 16;
     var particleHeight = 32;
-    this.inventory = [new Weapon("img/Bullet_Trace.png",50,-10)]; //Defines what weapons the inventory contains
+    this.points = 0;
+    this.health = 100;
+    this.dead = false;
+    this.inventory = [new Weapon("img/Bullet_Trace.png",5,-10)]; //Defines what weapons the inventory contains
     this.currentWeapon = this.inventory[0]; //Defines which weapon is being used at the current time
     this.fireCooldown = 0; //
 
     this.id = "Player"; //Defines the id attached to the player object
         this.fire = function(Entities) { //
+
+            
             with (this) {
-                for (var i = 0; i < this.currentWeapon.shotsPerFire; i++) {
+                for (var i = 0; i < this.currentWeapon.shotsperfire; i++) {
+                    with(currentWeapon) {
+                        var particle = new Particle(this.posX + this.width / 2 - currentWeapon.particleWidth / 2, this.posY - currentWeapon.particleHeight, currentWeapon.particleWidth, currentWeapon.particleHeight, currentWeapon.sprite,this);
+                    }
 
-                    var particle = new Particle(currentweapon.posX + currentwaepon.width / 2 - currentweapon.particleWidth / 2, currentweapon.posY - currentweapon.particleHeight, currentweapon.particleWidth, currentweapon.particleHeight, currentweapon.sprite);
-
+                    //var particle = new Particle(currentWeapon.posX + currentWeapon.width / 2 - currentWeapon.particleWidth / 2, currentWeapon.posY - currentWeapon.particleHeight, currentWeapon.particleWidth, currentWeapon.particleHeight, currentWeapon.sprite);
                     particle.speedY = this.currentWeapon.speed;
                     particle.id = this.id;
                     //particle.speedX = (Math.random()*(5+5)-5)*(1-accuracy);
@@ -53,7 +59,15 @@ function Player(posX,posY,width,height) { //This Player function defines the pla
 
 
        this.tick = function(Entities,keyinput) {
-        this.fireCooldown -= 16.67;
+        if(this.health<=0) {
+                Player.dead = true;
+        }
+
+        this.points = Player.points;
+        if(this.fireCooldown>=0) {
+            this.fireCooldown -= 16.67;
+        }
+        
 
         if(keyinput.KEY_LEFT==1) {
             this.speedX = -this.speed;
@@ -91,6 +105,7 @@ function Player(posX,posY,width,height) { //This Player function defines the pla
 
 }
 
+
 function Enemy(posX,posY,width,height) {
     Entity.call(this,posX,posY,width,height);
     this.color = "red";
@@ -99,13 +114,15 @@ function Enemy(posX,posY,width,height) {
     this.testVariable = 0;
     this.id = "enemy";
     this.health = 100;
+    this.currentWeapon = new Weapon("img/Basic_Rocket", 5, 10, 10);
     this.fireCooldown = 0;
 
     this.tick = function(Entities) {
+
         this.fireCooldown-=16.67;
         if(this.fireCooldown<=0) {
             this.fire(Entities);
-            this.fireCooldown=1000;
+            this.fireCooldown=1000/this.currentWeapon.firerate;
         }
         if (this.health <= 0) {
             this.deleted = true;
@@ -123,9 +140,9 @@ function Enemy(posX,posY,width,height) {
     }
 
     this.fire = function(Entities) {
-        var particle = new Particle("img/Basic_Rocket.png",this.posX+this.width/2, this.posY+this.height,16,32);
+        var particle = new Particle(this.posX+this.width/2, this.posY+this.height,16,32,"img/Basic_Rocket.png",this);
         particle.id=this.id;
-        particle.rotation = 180;
+        particle.speedY = this.currentWeapon.speed;
         Entities.push(particle);
     }
 
@@ -143,11 +160,13 @@ function Particle(posX,posY,width,height,imageSrc,shooter) {
     this.collisionCheck = function(object) {
         if (this.posX + this.width > object.posX && object.posX + object.width > this.posX &&
             this.posY + this.height > object.posY && object.posY + object.height > this.posY&&(object.id!=this.id&&(object.class!=Player||object.class!=Enemy))){
-            console.log("Collision!");
             this.deleted = true;
-            object.health -= this.damage;
-            this.shooter.points += 250;
-            console.log(Player.points);
+            object.health -= this.shooter.currentWeapon.damage;
+            
+            if(shooter.constructor==Player) {
+                shooter.points += 50;
+            }
+            
         }
 
             };
@@ -159,7 +178,7 @@ function Particle(posX,posY,width,height,imageSrc,shooter) {
                 this.collisionCheck(Entities[i]);
             }
         }
-        if(this.posY+this.height<0) {
+        if(this.posY+this.height<0||this.posY+this.height>550) {
             this.deleted = true;
 
         }
