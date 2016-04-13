@@ -22,7 +22,6 @@ function Entity(posX, posY, width, height){ //This Entity function defines the e
     }
 }
 
-
 function Player(posX,posY,width,height) { //This Player function defines the player object we display in the game
     Entity.call(this,posX,posY,width,height); //This sets the Player function to the Entity template
     this.color = "green";
