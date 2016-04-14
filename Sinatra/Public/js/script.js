@@ -33,7 +33,7 @@ function StartGameLoop() {      //This function starts the primary loop for our 
        // var basic_hud = document.getElementbyID("HUD_Basic_2").style.backgroundImage = "img/HUD_Basic_2.png";
         var hud = new Image("img/HUD_Basic_2.png");
         var hud_element = document.createElement("img");
-        hud_element.src = "img/HUD_Basic_2.png";
+        hud_element.src = "img/HUD_Basic_3.png";
         for(var i = 0; i < EntityList.length; i++) {
             var image = new Image();
 
