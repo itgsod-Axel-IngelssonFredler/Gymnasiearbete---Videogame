@@ -27,10 +27,10 @@ function Player(posX,posY,width,height) { //This Player function defines the pla
     Entity.call(this,posX,posY,width,height); //This sets the Player function to the Entity template
     this.color = "#0F0";
     this.points = 0;
-
+    this.src = "img/_UNFINISHED_-Plane.png";
     this.health = 100;
     this.dead = false;
-    this.inventory = [new Weapon("img/Bullet_Trace.png", 10, -20, 50)]; //Defines what weapons the inventory contains
+    this.inventory = [new Weapon("img/Bullet_Trace.png", 5, -20, 100)]; //Defines what weapons the inventory contains
     this.currentWeapon = this.inventory[0]; //Defines which weapon is being used at the current time
     this.fireCooldown = 0; //
 
@@ -106,12 +106,15 @@ function Enemy(posX,posY,width,height) {
     this.testVariable = 0;
     this.id = "Enemy";
     this.health = 100;
-    this.currentWeapon = new Weapon("img/Basic_Rocket", 5, 10, 5);
+    this.currentWeapon = new Weapon("img/Basic_Rocket", 5, 10, 10);
     this.fireCooldown = 0;
 
     this.tick = function(Entities) {
-        this.fireCooldown-=Tickspeed;
-        if(this.fireCooldown<=0) {
+        if(this.fireCooldown>0) {
+          this.fireCooldown-=Tickspeed;  
+        }
+        
+        if(this.fireCooldown<=0&&this.posX>=Entities[0].posX-50&&this.posX<=Entities[0].posX+50) {
             this.fire(Entities);
             this.fireCooldown=1000/this.currentWeapon.firerate;
         }

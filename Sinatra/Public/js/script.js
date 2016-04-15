@@ -17,6 +17,7 @@ function run() {    //This is function that runs when the "onload"
     canvas = document.getElementById("canvas"); //Here we create a global variable with the name "canvas"
                                                 //using the "getElementById" function on the html element with the id "canvas"
     context = canvas.getContext("2d");      //
+
 }
 
 function StartGameLoop() {      //This function starts the primary loop for our game.
@@ -46,19 +47,18 @@ function StartGameLoop() {      //This function starts the primary loop for our 
                 context.fillRect(EntityList[i].posX,EntityList[i].posY, EntityList[i].width,EntityList[i].height);
             }
             else {
-                context.strokeStyle = EntityList[i].color;
-                context.strokeRect(EntityList[i].posX,EntityList[i].posY, EntityList[i].width,EntityList[i].height);
+                 if(EntityList[i].src != undefined) {
+                image.src = EntityList[i].src;
+                context.drawImage(image,EntityList[i].posX,EntityList[i].posY);
+
+                }
             }
             context.fillStyle = "#00FF00";
             context.font="20px Arial";
 
             context.fillText(EntityList[0].points,30,30);
 
-            if(EntityList[i].src != undefined) {
-                image.src = EntityList[i].src;
-                context.drawImage(image,EntityList[i].posX,EntityList[i].posY);
-
-            }
+           
 
            
 
@@ -67,11 +67,11 @@ function StartGameLoop() {      //This function starts the primary loop for our 
             EntityList[i].posY += EntityList[i].speedY;
         }
 
-        context.drawImage(hud_element,0,0);
-        context.fillRect(savedEntity.posX,savedEntity.posY,savedEntity.width,savedEntity.height)
-
         
-    }, 1);      // In the "setInterval" function we use the interval 16.67~ because of the following equation:
+        context.fillRect(savedEntity.posX,savedEntity.posY,savedEntity.width,savedEntity.height)
+        context.drawImage(hud_element,0,0);
+        
+    }, 1000/60);      // In the "setInterval" function we use the interval 16.67~ because of the following equation:
                     // Our target frames per second = 60
                     // If we convert that to seconds per frame instead we get: frames/seconds --> seconds/frames, amount of frames per 1 second = 60/1, amount of seconds per 60 frames = 1/60.
                     // Since the "setInterval" function uses miliseconds, the final equation for the interval is: 1000 (ms)/ 60 (fps) ≈ 16.67 (ms per frame)

@@ -50,10 +50,13 @@ wss.on("connection", function(ws) { /**
 	var game;
 	var Entities;
 
+
 	function newGame() {
+		
 		game = new Game();
 		Entities = game.Entities;
 	}
+	var delay = 2000;
 
     function tick() {				/**
     								This function "tick()" can be summarized as the heartbeat of the game. This is the loop 
@@ -125,7 +128,7 @@ wss.on("connection", function(ws) { /**
 
 
 
-    var interval = setInterval(function() {if(Entities[0].dead!=true) {tick()} else {newGame();}}, tickspeed);
+    var interval = setInterval(function() {if(Entities[0].dead!=true) {tick()} else {if(delay<=0) {newGame(); delay = 2000} else {delay-=16.67};}}, tickspeed);
     var sendUpdateInterval = setInterval(function() {sendUpdate()}, updateDelay);
     ws.on("close", function() {
     	clearInterval(interval);
@@ -141,17 +144,23 @@ function Game() {
 
 	this.lastTime = 0;
 	this.currentTime = 0;
-	var player1 = new Player(400,400,30,40);
-
-	var enemy1 = new Enemy(400,50,30,40);
+	var player1 = new Player(400,400,44,52);
+	with(this) {
+		setInterval(function() {
+		var newenemy = new Enemy(Math.random()*550, Math.random()*200, 30,40);
+		Entities.push(newenemy);
+	},2500);
+	}
+	
+	//var enemy1 = new Enemy(400,50,30,40);
 	var lifebar_background = new Entity(300,500,200,20);
 	lifebar_background.color = "red";
 	var lifebar = new Lifebar(300,400,160,20,"#00FF00",player1,lifebar_background);
-	player1.speed = 5;
+	player1.speed = 4;
 	this.keyinput = new KeyInput();
 	with(this) {
 	Entities.push(player1);
-	Entities.push(enemy1);
+	//Entities.push(enemy1);
 	Entities.push(lifebar_background);
 	Entities.push(lifebar);
 	}
