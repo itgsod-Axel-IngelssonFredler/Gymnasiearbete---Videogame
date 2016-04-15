@@ -30,12 +30,11 @@ function StartGameLoop() {      //This function starts the primary loop for our 
         context.clearRect(0,0,canvas.width,canvas.height);
         context.fillStyle = "#000000";
         context.fillRect(0,0,canvas.width,canvas.height);
-       // var basic_hud = document.getElementbyID("HUD_Basic_2").style.backgroundImage = "img/HUD_Basic_2.png";
-        var hud = new Image("img/HUD_Basic_2.png");
         var hud_element = document.createElement("img");
         hud_element.src = "img/HUD_Basic_3.png";
         for(var i = 0; i < EntityList.length; i++) {
             var image = new Image();
+
 
             if(EntityList[i].src==undefined) {
                 context.fillStyle = EntityList[i].color;
@@ -64,8 +63,10 @@ function StartGameLoop() {      //This function starts the primary loop for our 
         }
 
         context.drawImage(hud_element,0,0);
+        context.fillRect(EntityList[2].posX, EntityList[2].posY,EntityList[2].width,EntityList[2].height);
+        context.fillRect(EntityList[3].posX, EntityList[3].posY,EntityList[3].width,EntityList[3].height);
         
-    }, 16.67);      // In the "setInterval" function we use the interval 16.67~ because of the following equation:
+    }, 1);      // In the "setInterval" function we use the interval 16.67~ because of the following equation:
                     // Our target frames per second = 60
                     // If we convert that to seconds per frame instead we get: frames/seconds --> seconds/frames, amount of frames per 1 second = 60/1, amount of seconds per 60 frames = 1/60.
                     // Since the "setInterval" function uses miliseconds, the final equation for the interval is: 1000 (ms)/ 60 (fps) ≈ 16.67 (ms per frame)

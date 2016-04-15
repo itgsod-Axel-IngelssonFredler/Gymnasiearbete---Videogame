@@ -30,7 +30,7 @@ function Player(posX,posY,width,height) { //This Player function defines the pla
 
     this.health = 100;
     this.dead = false;
-    this.inventory = [new Weapon("img/Bullet_Trace.png", 20, -100, 50)]; //Defines what weapons the inventory contains
+    this.inventory = [new Weapon("img/Bullet_Trace.png", 10, -20, 50)]; //Defines what weapons the inventory contains
     this.currentWeapon = this.inventory[0]; //Defines which weapon is being used at the current time
     this.fireCooldown = 0; //
 
@@ -101,11 +101,11 @@ function Player(posX,posY,width,height) { //This Player function defines the pla
 function Enemy(posX,posY,width,height) {
     Entity.call(this,posX,posY,width,height);
     this.color = "red";
-    this.speedX = 100;
+    this.speedX = 5;
     this.speedY = 0;
     this.testVariable = 0;
     this.id = "Enemy";
-    this.health = 2000;
+    this.health = 100;
     this.currentWeapon = new Weapon("img/Basic_Rocket", 5, 10, 5);
     this.fireCooldown = 0;
 
@@ -128,7 +128,7 @@ function Enemy(posX,posY,width,height) {
             speedX*=-1;
         }
         }
-    }
+    };
 
     this.fire = function(Entities) {
         var particle = new Particle(this.posX+this.width/2, this.posY+this.height,16,32,"img/Basic_Rocket.png",this);

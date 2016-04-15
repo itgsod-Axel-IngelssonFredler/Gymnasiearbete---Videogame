@@ -80,6 +80,10 @@ input[type="text"] {
 	box-shadow: 0px 0px 5px 4px rgba(0,0,0,0.38);
 }
 
+.button:hover {
+	box-shadow: 0px 0px 5px 4px #ff5300;
+}
+
 #canvas {
 	border:solid black 2px;
 }
