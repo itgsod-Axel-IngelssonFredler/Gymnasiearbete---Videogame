@@ -81,8 +81,13 @@ input[type="text"] {
 }
 
 .button:hover {
-	box-shadow: 0px 0px 5px 4px #ff5300;
+	background-image: url("../img/Website_Button_State_2.png");
 }
+
+.button:active {
+	background-image: url("../img/Website_Button_State_3.png");
+}
+
 
 #canvas {
 	border:solid black 2px;
