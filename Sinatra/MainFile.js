@@ -146,7 +146,7 @@ function Game() {
 	var enemy1 = new Enemy(400,50,30,40);
 	var lifebar_background = new Entity(300,500,200,20);
 	lifebar_background.color = "red";
-	var lifebar = new Lifebar(300,500,150,20,"#00FF00",player1,lifebar_background);
+	var lifebar = new Lifebar(300,400,160,20,"#00FF00",player1,lifebar_background);
 	player1.speed = 5;
 	this.keyinput = new KeyInput();
 	with(this) {

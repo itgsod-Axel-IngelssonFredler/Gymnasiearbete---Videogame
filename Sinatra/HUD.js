@@ -5,6 +5,7 @@ function Lifebar(x,y,width,height,color,object,background) {
 	this.maxhealth = this.parent.health;
 	this.background = background;
 	this.width = width;
+	this.id = "hp";
 	this.height = height;
 	this.speedX = 0;
 	this.speedY = 0;
